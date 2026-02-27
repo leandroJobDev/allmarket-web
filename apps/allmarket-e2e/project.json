@@ -1,0 +1,9 @@
+{
+  "name": "allmarket-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/allmarket-e2e/src",
+  "implicitDependencies": ["allmarket"],
+  "// targets": "to see all targets run: nx show project allmarket-e2e --web",
+  "targets": {}
+}
