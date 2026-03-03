@@ -11,5 +11,6 @@ import { NavBottom } from '../nav-bottom/nav-bottom';
 })
 export class Navbar {
   @Input() userData: any;
+  @Input() showNavBottom = true;
   @Output() logout = new EventEmitter<void>();
 }

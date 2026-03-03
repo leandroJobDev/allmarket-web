@@ -3,15 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {
-  Firestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  limit
-} from '@angular/fire/firestore';
-import { Navbar } from '@allmarket-web/shared'; 
+import { Navbar, NotasService, environment } from '@allmarket-web/shared'; 
 import { Home } from '../home/home'; 
 
 declare const google: any;
@@ -31,9 +23,9 @@ declare const google: any;
 })
 export class Login implements OnInit { 
   private cdr = inject(ChangeDetectorRef);
-  private firestore = inject(Firestore);
   private router = inject(Router);
   private ngZone = inject(NgZone);
+  private notasService = inject(NotasService);
 
   loading = false;
   isLoggedIn = false;
@@ -50,7 +42,7 @@ export class Login implements OnInit {
     if (savedUser) {
       this.userData = JSON.parse(savedUser);
       this.isLoggedIn = true;
-      this.verificarNotasNoFirebase(this.userData.email);
+      this.verificarNotas(this.userData.email);
     }
   }
 
@@ -63,14 +55,13 @@ export class Login implements OnInit {
     }
 
     const container = document.getElementById("google-btn-container");
-    
     if (!container) {
       setTimeout(() => this.iniciarLoginGoogle(), 100);
       return;
     }
 
     google.accounts.id.initialize({
-      client_id: "570724598871-n23jsilb8ncvfv2ve6b848q327fgdav9.apps.googleusercontent.com",
+      client_id: environment.googleClientId,
       callback: (response: any) => this.handleCredentialResponse(response),
       auto_select: true,
       ux_mode: 'popup'
@@ -85,19 +76,16 @@ export class Login implements OnInit {
   handleCredentialResponse(response: any) {
     this.ngZone.run(async () => {
       this.loading = true;
-      
       try {
         const base64Url = response.credential.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         this.userData = JSON.parse(window.atob(base64));
         
         localStorage.setItem('allmarket_user', JSON.stringify(this.userData));
-
         this.isLoggedIn = true; 
-        await this.verificarNotasNoFirebase(this.userData.email);
-
+        await this.verificarNotas(this.userData.email);
       } catch (error) {
-        console.error('ERRO no handleResponse:', error);
+        console.error(error);
       } finally {
         this.loading = false;
         this.cdr.detectChanges();
@@ -105,31 +93,20 @@ export class Login implements OnInit {
     });
   }
 
-  async verificarNotasNoFirebase(email: string) {
+  async verificarNotas(email: string) {
     try {
-      const notasRef = collection(this.firestore, 'tb_notas');
-      const q = query(
-        notasRef,
-        where('usuario_email', '==', email),
-        where('chave', '!=', ''),
-        limit(1)
-      );
-
-      const querySnapshot = await getDocs(q);
-      this.temNotas = !querySnapshot.empty;
-      
+      this.temNotas = await this.notasService.validarEAtualizarNotas(email);
       if (this.temNotas) {
         await this.router.navigateByUrl('/notas');
       }
-
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('ERRO ao consultar Firestore:', error);
       this.temNotas = false;
     }
   }
 
   sair() {
+    this.notasService.limparEstado();
     localStorage.removeItem('allmarket_user');
     this.isLoggedIn = false;
     this.userData = null;

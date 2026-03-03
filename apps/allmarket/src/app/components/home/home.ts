@@ -9,5 +9,5 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './home.scss',
 })
 export class Home {
-  @Input() user: any; 
+  @Input() user: any;
 }
