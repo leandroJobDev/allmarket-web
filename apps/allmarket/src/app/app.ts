@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Navbar } from '@allmarket-web/shared'; 
 
 @Component({
-  imports: [RouterModule],
+  imports: [RouterModule,Navbar],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',

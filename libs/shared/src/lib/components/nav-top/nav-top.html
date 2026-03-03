@@ -1,0 +1,21 @@
+<mat-toolbar class="main-nav">
+  <div class="nav-container">
+    
+    <div class="header-layout">
+      <img src="assets/img/favicon.svg" alt="Logo" class="logo-img">
+      <div class="brand-info">
+        <span class="brand-name">AllM@rket</span>
+        <span class="brand-slogan">Extraia . Escaneie . Economize</span>
+      </div>
+    </div>
+
+    <div class="user-controls">
+      <span class="user-display-name">{{ userData?.name }}</span>
+      
+      <button mat-icon-button (click)="logout.emit()" class="exit-button" title="Sair">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+
+  </div>
+</mat-toolbar>
