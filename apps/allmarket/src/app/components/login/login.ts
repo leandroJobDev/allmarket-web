@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Navbar, NotasService, environment } from '@allmarket-web/shared'; 
 import { Home } from '../home/home'; 
 
@@ -25,12 +26,14 @@ export class Login implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private ngZone = inject(NgZone);
+  private snackBar = inject(MatSnackBar);
   private notasService = inject(NotasService);
 
   loading = false;
   isLoggedIn = false;
   userData: any = null;
   temNotas = false;
+  erroMfe = false;
 
   ngOnInit() {
     this.verificarSessao();
@@ -93,16 +96,31 @@ export class Login implements OnInit {
     });
   }
 
-  async verificarNotas(email: string) {
+async verificarNotas(email: string) {
     try {
       this.temNotas = await this.notasService.validarEAtualizarNotas(email);
+      
       if (this.temNotas) {
-        await this.router.navigateByUrl('/notas');
+        this.router.navigateByUrl('/notas').catch(() => {
+          this.exibirErroMfe();
+        });
       }
-      this.cdr.detectChanges();
     } catch (error) {
-      this.temNotas = false;
+      this.exibirErroMfe();
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges();
     }
+  }
+
+  private exibirErroMfe() {
+    this.erroMfe = true;
+    this.temNotas = false;
+    this.snackBar.open('Sistema de notas indisponível no momento.', 'Fechar', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom'
+    });
   }
 
   sair() {
