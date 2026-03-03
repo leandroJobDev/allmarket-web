@@ -2,7 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": []
+    "types": [],
+    "target": "ES2020"
   },
   "include": ["src/**/*.ts"],
   "exclude": [
@@ -11,5 +12,6 @@
     "jest.config.ts",
     "jest.config.cts",
     "src/test-setup.ts"
-  ]
+  ],
+  "files": ["src/app/remote-entry/entry.routes.ts"]
 }

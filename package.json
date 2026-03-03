@@ -14,6 +14,7 @@
     "@angular/platform-browser": "~21.1.0",
     "@angular/platform-browser-dynamic": "~21.1.0",
     "@angular/router": "~21.1.0",
+    "@module-federation/enhanced": "^0.21.2",
     "firebase": "^12.10.0",
     "rxjs": "~7.8.0"
   },
@@ -32,8 +33,10 @@
     "@nx/eslint-plugin": "22.5.3",
     "@nx/jest": "22.5.3",
     "@nx/js": "22.5.3",
+    "@nx/module-federation": "22.5.3",
     "@nx/playwright": "22.5.3",
     "@nx/web": "22.5.3",
+    "@nx/webpack": "22.5.3",
     "@nx/workspace": "22.5.3",
     "@playwright/test": "^1.36.0",
     "@schematics/angular": "~21.1.0",

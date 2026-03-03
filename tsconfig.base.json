@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@allmarket-web/shared": ["libs/shared/src/index.ts"]
+      "@allmarket-web/shared": ["libs/shared/src/index.ts"],
+      "allmarket/Routes": [
+        "apps/allmarket/src/app/remote-entry/entry.routes.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
