@@ -25,3 +25,5 @@ yarn-error.log*
 .angular/cache
 
 .angular
+
+libs/shared/src/lib/environments/environment.ts
