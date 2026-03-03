@@ -1,14 +1,140 @@
-import { Component } from '@angular/core';
-import { Home } from '../home/home';
+import { Component, OnInit, NgZone, inject, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  limit
+} from '@angular/fire/firestore';
+import { Navbar } from '@allmarket-web/shared'; 
+import { Home } from '../home/home'; 
+
+declare const google: any;
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
-    Home,
-    MatCardModule
+    CommonModule,
+    MatCardModule,
+    MatProgressBarModule,
+    Navbar,     
+    Home    
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {}
+export class Login implements OnInit { 
+  private cdr = inject(ChangeDetectorRef);
+  private firestore = inject(Firestore);
+  private router = inject(Router);
+  private ngZone = inject(NgZone);
+
+  loading = false;
+  isLoggedIn = false;
+  userData: any = null;
+  temNotas = false;
+
+  ngOnInit() {
+    this.verificarSessao();
+    this.iniciarLoginGoogle();
+  }
+
+  verificarSessao() {
+    const savedUser = localStorage.getItem('allmarket_user');
+    if (savedUser) {
+      this.userData = JSON.parse(savedUser);
+      this.isLoggedIn = true;
+      this.verificarNotasNoFirebase(this.userData.email);
+    }
+  }
+
+  iniciarLoginGoogle() {
+    if (this.isLoggedIn) return;
+    
+    if (typeof google === 'undefined' || !google.accounts) {
+      setTimeout(() => this.iniciarLoginGoogle(), 300);
+      return;
+    }
+
+    const container = document.getElementById("google-btn-container");
+    
+    if (!container) {
+      setTimeout(() => this.iniciarLoginGoogle(), 100);
+      return;
+    }
+
+    google.accounts.id.initialize({
+      client_id: "570724598871-n23jsilb8ncvfv2ve6b848q327fgdav9.apps.googleusercontent.com",
+      callback: (response: any) => this.handleCredentialResponse(response),
+      auto_select: true,
+      ux_mode: 'popup'
+    });
+
+    google.accounts.id.renderButton(
+      container,
+      { theme: "outline", size: "large", shape: "pill", width: 280, locale: "pt_BR" }
+    );
+  }
+
+  handleCredentialResponse(response: any) {
+    this.ngZone.run(async () => {
+      this.loading = true;
+      
+      try {
+        const base64Url = response.credential.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        this.userData = JSON.parse(window.atob(base64));
+        
+        localStorage.setItem('allmarket_user', JSON.stringify(this.userData));
+
+        this.isLoggedIn = true; 
+        await this.verificarNotasNoFirebase(this.userData.email);
+
+      } catch (error) {
+        console.error('ERRO no handleResponse:', error);
+      } finally {
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  async verificarNotasNoFirebase(email: string) {
+    try {
+      const notasRef = collection(this.firestore, 'tb_notas');
+      const q = query(
+        notasRef,
+        where('usuario_email', '==', email),
+        where('chave', '!=', ''),
+        limit(1)
+      );
+
+      const querySnapshot = await getDocs(q);
+      this.temNotas = !querySnapshot.empty;
+      
+      if (this.temNotas) {
+        await this.router.navigateByUrl('/notas');
+      }
+
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('ERRO ao consultar Firestore:', error);
+      this.temNotas = false;
+    }
+  }
+
+  sair() {
+    localStorage.removeItem('allmarket_user');
+    this.isLoggedIn = false;
+    this.userData = null;
+    this.temNotas = false;
+    this.router.navigate(['/login']);
+    setTimeout(() => this.iniciarLoginGoogle(), 300);
+  }
+}

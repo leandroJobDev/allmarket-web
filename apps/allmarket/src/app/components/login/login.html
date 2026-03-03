@@ -1,2 +1,46 @@
-<p>login works!</p>
-<app-home></app-home>
+<div class="screen-container" *ngIf="!isLoggedIn">
+  <mat-card class="login-card">
+    <mat-card-content>
+      <div class="logo-wrapper">
+        <img src="assets/img/favicon.svg" alt="Ícone AllMarket" class="main-icon">
+      </div>
+
+      <div class="brand-section">
+        <div class="brand-name">All<span class="text-blue">M@rket</span></div>
+        <h3 class="main-title">
+          EXTRAIA. ESCANEIE.<br>
+          <span class="text-blue">ECONOMIZE.</span>
+        </h3>
+      </div>
+
+      <p class="welcome-text">
+        <span class="sparkle">✨</span> Conecte-se e deixe nossa<br>
+        <span class="black-italic">inteligência trabalhar por você</span>,<br>
+        transformando cada nota em <span class="text-blue-bold">dados que protegem seu bolso.</span>
+      </p>
+
+      <div class="google-slot">
+        <div id="google-btn-container"></div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="copyright-footer">
+    © 2026 ALLM@RKET
+  </div>
+</div>
+
+<ng-container *ngIf="isLoggedIn">
+  <lib-navbar [userData]="userData" (logout)="sair()"></lib-navbar>
+  
+  <main class="content-wrapper">
+    <app-home *ngIf="!temNotas" [user]="userData"></app-home>
+    
+    <div *ngIf="temNotas" class="loading-state">
+      <p>Redirecionando para suas notas...</p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  </main>
+</ng-container>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading" class="global-progress"></mat-progress-bar>
