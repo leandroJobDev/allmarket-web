@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
-import { NxWelcome } from './nx-welcome';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  imports: [NxWelcome],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   selector: 'app-allmarket-entry',
-  template: `<app-nx-welcome></app-nx-welcome>`,
+  template: `
+    <!-- root component must expose a router outlet for routed components -->
+    <router-outlet></router-outlet>
+  `,
 })
 export class RemoteEntry {}

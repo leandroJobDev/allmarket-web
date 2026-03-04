@@ -101,17 +101,14 @@ async verificarNotas(email: string) {
       this.temNotas = await this.notasService.validarEAtualizarNotas(email);
       
       if (this.temNotas) {
-        this.router.navigateByUrl('/notas').catch(() => {
-          this.exibirErroMfe();
+        this.ngZone.run(() => {
+          this.router.navigate(['/notas']);
         });
       }
     } catch (error) {
       this.exibirErroMfe();
-    } finally {
-      this.loading = false;
-      this.cdr.detectChanges();
     }
-  }
+}
 
   private exibirErroMfe() {
     this.erroMfe = true;

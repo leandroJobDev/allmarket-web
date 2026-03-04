@@ -5,8 +5,10 @@ import { setRemoteDefinitions } from '@nx/angular/mf';
 import { environment } from '@allmarket-web/shared';
 
 // register remotes early so router/loadRemoteModule can find them
+// the remote name must match the one used in app.routes.ts and module-federation.config.ts
 setRemoteDefinitions({
-  'notas-mfe': environment.notasMfeUrl,
+  // use underscore notation to stay consistent with the federated config
+  'notas_mfe': environment.notasMfeUrl,
 });
 
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';

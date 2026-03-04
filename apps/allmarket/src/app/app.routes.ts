@@ -10,9 +10,8 @@ export const appRoutes: Route[] = [
   {
     path: 'notas',
     loadChildren: () =>
-      loadRemoteModule('notas-mfe', './Module').catch(() => {
-        throw new Error('MFE_LOAD_ERROR');
-      }),
+      // Aqui passamos exatamente os 2 argumentos que o erro TS2554 pediu
+      loadRemoteModule('notas_mfe', './Routes').then((m) => m.remoteRoutes),
   },
   {
     path: '',

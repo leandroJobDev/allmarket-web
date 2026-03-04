@@ -2,12 +2,8 @@ import { ModuleFederationConfig } from '@nx/module-federation';
 
 const config: ModuleFederationConfig = {
   name: 'allmarket',
-  exposes: {
-    './Routes': 'apps/allmarket/src/app/remote-entry/entry.routes.ts',
+  remotes: {
+    "notas_mfe": "http://localhost:4201"
   },
 };
-
-/**
- * Nx requires a default export of the config to allow correct resolution of the module federation graph.
- **/
 export default config;
