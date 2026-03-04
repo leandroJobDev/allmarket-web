@@ -18,6 +18,9 @@
       "@allmarket-web/shared": ["libs/shared/src/index.ts"],
       "allmarket/Routes": [
         "apps/allmarket/src/app/remote-entry/entry.routes.ts"
+      ],
+      "notas_mfe/Routes": [
+        "apps/notas_mfe/src/app/remote-entry/entry.routes.ts"
       ]
     }
   },
