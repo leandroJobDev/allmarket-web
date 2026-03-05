@@ -1,4 +1,7 @@
 .bottom-nav {
+  --navbar-height: 80px;
+  --processar-height: 90px;
+
   position: fixed;
   bottom: 0;
   left: 0;
@@ -14,6 +17,9 @@
     justify-content: space-around;
     align-items: center;
     height: 64px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 16px;
   }
 
   .nav-item {
@@ -24,7 +30,7 @@
     min-width: 0 !important;
     padding: 0 !important;
     flex: 1;
-    color: #9ca3af; // Cinza desativado
+    color: #9ca3af;
     background: transparent;
     border: none;
 
@@ -49,19 +55,39 @@
     }
 
     &.active {
-      color: #2563eb; // Azul AllMarket
+      color: #2563eb;
     }
   }
 }
 
-// Ocultar no Desktop (acima de 768px)
 @media (min-width: 768px) {
   .bottom-nav {
-    display: none !important;
+    display: flex !important;
+    bottom: auto;
+    top: calc(var(--navbar-height) + var(--processar-height));
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
+    .nav-container {
+      background: #f1f5f9;
+      border-radius: 12px;
+      height: 48px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .nav-item {
+      border-radius: 8px;
+      
+      &.active {
+        background: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      }
+    }
   }
 }
 
-// Suporte para iPhones com notch
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }

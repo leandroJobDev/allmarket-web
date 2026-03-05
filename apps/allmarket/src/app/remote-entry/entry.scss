@@ -22,25 +22,24 @@ $processar-height: 90px;
 
 .processar-bar lib-processar-nota {
   width: 100%;
-  max-width: 400px; /* Mesmo max-width do .welcome-card */
+  max-width: 400px;
   display: block;
 }
 
-.processar-wrapper {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
-}
-
 .content-area {
-  padding-top: calc(#{$app-navbar-height} + #{$processar-height} + 10px);
+  min-height: 100vh;
   max-width: 1280px;
   margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+}
+
+.has-fixed-elements .content-area {
+  justify-content: flex-start;
+  padding-top: calc(#{$app-navbar-height} + #{$processar-height} + 10px);
 }
 
 main {

@@ -1,4 +1,4 @@
-<div class="app-layout">
+<div class="app-layout" [class.has-fixed-elements]="exibirNavbar || exibirProcessarNota">
 
   <lib-navbar
     *ngIf="exibirNavbar"
