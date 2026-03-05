@@ -1,0 +1,58 @@
+<div class="notas-container" *ngIf="nota">
+  <mat-card class="result-card animate-in">
+    <div class="card-header-accent"></div>
+    
+    <mat-card-header>
+      <div class="header-main">
+        <div class="title-group">
+          <mat-card-title class="loja-nome">
+            {{ nota.estabelecimento.nome }}
+          </mat-card-title>
+          <div class="sub-info">
+            <span class="endereco">{{ nota.estabelecimento.endereco }}</span>
+            <button mat-button color="warn" class="btn-excluir" (click)="removerNota(nota.chave)">
+              <mat-icon>delete_outline</mat-icon>
+              <span class="btn-label">EXCLUIR NOTA</span>
+            </button>
+          </div>
+        </div>
+        <button mat-icon-button class="btn-close" (click)="fecharNota()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="nota-meta-data">
+        <p class="info-data">
+          {{ nota.data_emissao }} | TOTAL: {{ nota.valor_total | currency:'BRL' }}
+        </p>
+        <span class="meta-label">CHAVE DE ACESSO</span>
+        <p class="chave-texto">{{ nota.chave }}</p>
+      </div>
+
+      <div class="table-container">
+        <table mat-table [dataSource]="nota.itens" class="itens-table">
+          
+          <ng-container matColumnDef="item">
+            <th mat-header-cell *mat-header-cellDef> ITENS </th>
+            <td mat-cell *mat-cellDef="let element"> 
+              <span class="item-nome">{{ element.nome }}</span>
+              <span class="item-qtd">Qtd: {{ element.quantidade }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="valor">
+            <th mat-header-cell *mat-header-cellDef class="text-right"> VALOR </th>
+            <td mat-cell *mat-cellDef="let element" class="text-right font-bold"> 
+              {{ element.preco_total | currency:'BRL' }} 
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *mat-header-rowDef="displayedColumns"></tr>
+          <tr mat-row *mat-rowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

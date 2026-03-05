@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { NxWelcome } from './nx-welcome';
+import { Home } from '../home/home';
 
 @Component({
-  imports: [NxWelcome],
+  imports: [Home],
   selector: 'app-notas_mfe-entry',
-  template: `<app-nx-welcome></app-nx-welcome>`,
+  template: `<app-home></app-home>`,
 })
 export class RemoteEntry {}
