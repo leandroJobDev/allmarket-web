@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Navbar, NotasService, environment } from '@allmarket-web/shared'; 
+import { NotasService, environment } from '@allmarket-web/shared'; 
 import { Home } from '../home/home'; 
 
 declare const google: any;
@@ -15,8 +15,7 @@ declare const google: any;
   imports: [
     CommonModule,
     MatCardModule,
-    MatProgressBarModule,
-    Navbar,     
+    MatProgressBarModule,      
     Home    
   ],
   templateUrl: './login.html',
@@ -76,25 +75,33 @@ export class Login implements OnInit {
     );
   }
 
-  handleCredentialResponse(response: any) {
-    this.ngZone.run(async () => {
-      this.loading = true;
-      try {
-        const base64Url = response.credential.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        this.userData = JSON.parse(window.atob(base64));
-        
-        localStorage.setItem('allmarket_user', JSON.stringify(this.userData));
-        this.isLoggedIn = true; 
-        await this.verificarNotas(this.userData.email);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.loading = false;
-        this.cdr.detectChanges();
+handleCredentialResponse(response: any) {
+  this.ngZone.run(async () => {
+    this.loading = true;
+    try {
+      const base64Url = response.credential.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+
+      this.userData = JSON.parse(jsonPayload);
+      localStorage.setItem('allmarket_user', JSON.stringify(this.userData));
+      this.isLoggedIn = true; 
+
+      await this.verificarNotas(this.userData.email);
+      
+      if (!this.temNotas) {
+        this.router.navigate(['/home']); 
       }
-    });
-  }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
 
 async verificarNotas(email: string) {
     try {

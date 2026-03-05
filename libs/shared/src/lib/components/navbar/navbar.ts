@@ -5,6 +5,7 @@ import { NavBottom } from '../nav-bottom/nav-bottom';
 
 @Component({
   selector: 'lib-navbar',
+  standalone: true,
   imports: [CommonModule, NavTop, NavBottom],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',

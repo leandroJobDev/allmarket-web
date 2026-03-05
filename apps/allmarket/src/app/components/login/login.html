@@ -8,8 +8,8 @@
             <div class="brand-section">
                 <div class="brand-name">All<span class="text-blue">M@rket</span></div>
                 <h3 class="main-title">
-                    EXTRAIA. ESCANEIE.<br>
-                    <span class="text-blue">ECONOMIZE.</span>
+                    ESCANEIA. EXAMINA.<br>
+                    <span class="text-blue">ECONOMIZA.</span>
                 </h3>
             </div>
 
@@ -19,20 +19,13 @@
 
             <p class="welcome-text">
                 <span class="sparkle">✨</span> Conecte-se e deixe nossa<br>
-                <span class="black-italic">inteligência trabalhar por você</span>,<br>
-                transformando cada nota em <span class="text-blue-bold">dados que protegem seu bolso.</span>
+                <span class="black-italic">inteligência trabalhar por você</span>
             </p>
         </mat-card-content>
     </mat-card>
-
-    <div class="copyright-footer">
-        © 2026 ALLM@RKET
-    </div>
 </div>
 
 <ng-container *ngIf="isLoggedIn">
-    <lib-navbar [userData]="userData" [showNavBottom]="false" (logout)="sair()"></lib-navbar>
-
     <div class="main-content">
         <app-home *ngIf="!temNotas || erroMfe" [user]="userData"></app-home>
 

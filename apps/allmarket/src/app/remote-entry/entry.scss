@@ -1,0 +1,48 @@
+$app-navbar-height: 80px;
+$processar-height: 90px;
+
+.app-layout {
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.processar-bar {
+  position: fixed;
+  top: $app-navbar-height;
+  left: 0;
+  right: 0;
+  height: $processar-height;
+  background: #f9fafb;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.processar-bar lib-processar-nota {
+  width: 100%;
+  max-width: 400px; /* Mesmo max-width do .welcome-card */
+  display: block;
+}
+
+.processar-wrapper {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+}
+
+.content-area {
+  padding-top: calc(#{$app-navbar-height} + #{$processar-height} + 10px);
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main {
+  width: 100%;
+}
