@@ -1,5 +1,5 @@
 <div class="home-container">
-    <section id="historicoSec" class="animate-in">
+    <section id="historicoSec" class="animate-in" *ngIf="todasAsNotas.length > 0">
         <div class="header-info">
             <p class="contador-notas">
                 {{ todasAsNotas.length }} NOTAS ENCONTRADAS
@@ -30,4 +30,8 @@
             </button>
         </div>
     </section>
+
+    <div *ngIf="todasAsNotas.length === 0" class="welcome-card">
+        <p>Nenhuma nota encontrada. Comece processando uma nova nota fiscal!</p>
+    </div>
 </div>

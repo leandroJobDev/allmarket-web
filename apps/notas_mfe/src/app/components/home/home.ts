@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { NotasService } from '@allmarket-web/shared';
+import { NotasApiService } from '@allmarket-web/shared';
 import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
 
 @Component({
@@ -24,7 +24,7 @@ import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
   styleUrls: ['./home.scss']
 })
 export class Home implements OnInit {
-  private notasService = inject(NotasService);
+  private apiService = inject(NotasApiService);
 
   todasAsNotas: any[] = [];
   notasFiltradas: any[] = [];
@@ -32,6 +32,10 @@ export class Home implements OnInit {
   
   limiteExibicao = 8;
   termoBusca = '';
+
+  get temMaisNotas(): boolean {
+    return this.notasExibidas.length < this.notasFiltradas.length;
+  }
 
   ngOnInit() {
     this.carregarDados();
@@ -41,13 +45,28 @@ export class Home implements OnInit {
     const email = localStorage.getItem('allmarket_user_email');
     if (email) {
       try {
-        const notas = await this.notasService.getHistorico(email);
+        const notas = await this.apiService.getHistorico(email);
         this.todasAsNotas = notas.sort((a: any, b: any) => b.data_emissao.localeCompare(a.data_emissao));
         this.atualizarLista();
       } catch (error) {
         console.error('Erro ao carregar histórico:', error);
       }
     }
+  }
+
+  async handleDeleteNota(chave: string) {
+    const email = localStorage.getItem('allmarket_user_email');
+    if (email && chave) {
+      const sucesso = await this.apiService.excluirNota(chave, email);
+      if (sucesso) {
+        this.todasAsNotas = this.todasAsNotas.filter(n => n.chave !== chave);
+        this.atualizarLista();
+      }
+    }
+  }
+
+  onCloseDetails() {
+    // Lógica para quando fechar o detalhe, se necessário
   }
 
   filtrarHistorico(event: any) {
@@ -64,19 +83,6 @@ export class Home implements OnInit {
 
   mostrarMaisNotas() {
     this.limiteExibicao += 8;
-    this.atualizarLista();
-  }
-
-  get temMaisNotas(): boolean {
-    return this.notasExibidas.length < this.notasFiltradas.length;
-  }
-
-  handleDeleteNota(chave: string) {
-    this.todasAsNotas = this.todasAsNotas.filter(nota => nota.chave !== chave);
-    this.atualizarLista();
-  }
-
-  onCloseDetails() {
     this.atualizarLista();
   }
 }

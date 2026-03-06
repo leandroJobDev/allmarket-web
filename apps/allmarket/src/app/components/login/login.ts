@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NotasService, environment } from '@allmarket-web/shared'; 
+import { NotasApiService, environment } from '@allmarket-web/shared'; 
 import { Home } from '../home/home'; 
 
 declare const google: any;
@@ -26,7 +26,7 @@ export class Login implements OnInit {
   private router = inject(Router);
   private ngZone = inject(NgZone);
   private snackBar = inject(MatSnackBar);
-  private notasService = inject(NotasService);
+  private notasApiService = inject(NotasApiService);
 
   loading = false;
   isLoggedIn = false;
@@ -105,11 +105,19 @@ handleCredentialResponse(response: any) {
 
 async verificarNotas(email: string) {
     try {
-      this.temNotas = await this.notasService.validarEAtualizarNotas(email);
-      
+      this.temNotas = await this.notasApiService.validarEAtualizarNotas(email);
+
+      console.log('[Login] verificarNotas resultado temNotas:', this.temNotas);
+
       if (this.temNotas) {
-        this.ngZone.run(() => {
-          this.router.navigate(['/notas']);
+        this.ngZone.run(async () => {
+          try {
+            const ok = await this.router.navigate(['/notas']);
+            console.log('[Login] navegação para /notas result:', ok);
+          } catch (navErr) {
+            console.error('[Login] erro ao navegar para /notas:', navErr);
+            this.exibirErroMfe();
+          }
         });
       }
     } catch (error) {
@@ -128,7 +136,7 @@ async verificarNotas(email: string) {
   }
 
   sair() {
-    this.notasService.limparEstado();
+    this.notasApiService.limparEstado();
     localStorage.removeItem('allmarket_user');
     this.isLoggedIn = false;
     this.userData = null;

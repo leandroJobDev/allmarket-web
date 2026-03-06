@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Home } from '../home/home';
+import { Home } from '../components/home/home';
 
 @Component({
   imports: [Home],
