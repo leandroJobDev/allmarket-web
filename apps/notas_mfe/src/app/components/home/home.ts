@@ -1,5 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,22 +20,20 @@ import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
     MatButtonModule,
     NotaDetalhes
   ],
+  providers: [CurrencyPipe, DatePipe],
   templateUrl: './home.html',
   styleUrls: ['./home.scss']
 })
 export class Home implements OnInit {
   private apiService = inject(NotasApiService);
+  private cdr = inject(ChangeDetectorRef);
 
   todasAsNotas: any[] = [];
   notasFiltradas: any[] = [];
   notasExibidas: any[] = [];
-  
-  limiteExibicao = 8;
+  notaSelecionada: any = null;
+  limiteExibicao = 4;
   termoBusca = '';
-
-  get temMaisNotas(): boolean {
-    return this.notasExibidas.length < this.notasFiltradas.length;
-  }
 
   ngOnInit() {
     this.carregarDados();
@@ -46,10 +44,12 @@ export class Home implements OnInit {
     if (email) {
       try {
         const notas = await this.apiService.getHistorico(email);
-        this.todasAsNotas = notas.sort((a: any, b: any) => b.data_emissao.localeCompare(a.data_emissao));
+        this.todasAsNotas = [...notas].sort((a: any, b: any) => 
+          (b.data_emissao || '').localeCompare(a.data_emissao || '')
+        );
         this.atualizarLista();
       } catch (error) {
-        console.error('Erro ao carregar histórico:', error);
+        console.error(error);
       }
     }
   }
@@ -60,29 +60,55 @@ export class Home implements OnInit {
       const sucesso = await this.apiService.excluirNota(chave, email);
       if (sucesso) {
         this.todasAsNotas = this.todasAsNotas.filter(n => n.chave !== chave);
+        this.notaSelecionada = null;
         this.atualizarLista();
       }
     }
   }
 
-  onCloseDetails() {
-    // Lógica para quando fechar o detalhe, se necessário
-  }
-
-  filtrarHistorico(event: any) {
-    this.termoBusca = event.target.value.toLowerCase();
-    this.atualizarLista();
+  selecionarNota(nota: any) {
+    if (this.notaSelecionada?.chave === nota.chave) {
+      this.notaSelecionada = null;
+    } else {
+      this.notaSelecionada = nota;
+      setTimeout(() => {
+        document.getElementById('res')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
   }
 
   atualizarLista() {
-    this.notasFiltradas = this.todasAsNotas.filter(nota => 
-      nota.estabelecimento.nome.toLowerCase().includes(this.termoBusca)
-    );
+    this.notasFiltradas = this.todasAsNotas.filter(nota => {
+      const nome = nota.estabelecimento?.nome?.toLowerCase() || '';
+      return nome.includes(this.termoBusca);
+    });
     this.notasExibidas = this.notasFiltradas.slice(0, this.limiteExibicao);
+    this.cdr.detectChanges();
+  }
+
+  filtrarHistorico(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.termoBusca = input.value.toLowerCase();
+    this.limiteExibicao = 4;
+    this.notaSelecionada = null;
+    this.atualizarLista();
   }
 
   mostrarMaisNotas() {
-    this.limiteExibicao += 8;
+    this.limiteExibicao += 4;
     this.atualizarLista();
+  }
+
+  limparNome(nome: string): string {
+    if (!nome) return 'ESTABELECIMENTO';
+    return nome.replace(/SUPERMERCADOS?|MERCADOS?|ATACADISTA|COMERCIO|LTDA|S\/A/gi, '').trim();
+  }
+
+  formatarData(dataStr: string): string {
+    return dataStr ? dataStr.split(' ')[0] : '--/--/----';
+  }
+
+  get temMaisNotas(): boolean {
+    return this.notasExibidas.length < this.notasFiltradas.length;
   }
 }

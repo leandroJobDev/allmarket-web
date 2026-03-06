@@ -1,4 +1,4 @@
-<div class="screen-container" *ngIf="!isLoggedIn">
+<div class="screen-container" *ngIf="!loading">
     <mat-card class="login-card">
         <mat-card-content>
             <div class="logo-wrapper">
@@ -25,13 +25,7 @@
     </mat-card>
 </div>
 
-<ng-container *ngIf="isLoggedIn">
-    <div class="main-content">
-        <app-home *ngIf="!temNotas || erroMfe" [user]="userData"></app-home>
-
-        <div *ngIf="temNotas && !erroMfe" class="loading-state">
-            <p>Redirecionando para suas notas...</p>
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        </div>
-    </div>
-</ng-container>
+<div *ngIf="loading" class="loading-state">
+    <p>Validando acesso...</p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
