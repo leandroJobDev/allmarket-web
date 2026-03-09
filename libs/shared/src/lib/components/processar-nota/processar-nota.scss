@@ -3,44 +3,58 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent;
-  
-  /* AJUSTE DE ESPAÇAMENTO */
-  /* Eixo Y: 12px em cima e embaixo para não colar no nav-top e nav-bottom */
-  /* Eixo X: 16px nas laterais para alinhar com o favicon do nav-top */
-  padding: 12px 16px; 
-  box-sizing: border-box;
+  padding: 20px 16px; // Espaçamento Y para não colar nas barras
+  background-color: #f9fafb;
 }
 
 .search-bar-wrapper {
   width: 100%;
-  /* Garante que o input respeite o mesmo limite máximo do nav-top */
-  max-width: 1280px; 
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.06));
+  max-width: 1280px;
 
   ::ng-deep {
     .custom-pill-field {
       width: 100%;
-
+      
       .mat-mdc-text-field-wrapper {
         border-radius: 50px !important;
-        background-color: #ffffff !important;
-        height: 56px !important;
-        padding: 0 6px 0 24px !important;
-        display: flex;
-        align-items: center;
+        background-color: #f1f5f9 !important; // Cinza claro da imagem
+        height: 60px !important;
+        padding: 0 8px 0 24px !important;
+        border: none !important;
+        
+        .mat-mdc-form-field-flex {
+          align-items: center !important;
+        }
       }
 
-      .mat-mdc-form-field-subscript-wrapper {
-        display: none;
+      .mat-mdc-form-field-focus-indicator { display: none; }
+      .mat-mdc-form-field-subscript-wrapper { display: none; }
+      
+      input {
+        font-size: 16px !important;
+        color: #64748b !important;
       }
     }
   }
 }
 
-/* Ajuste para telas muito pequenas */
-@media (max-width: 600px) {
-  .processar-nota-container {
-    padding: 8px 16px; /* Um pouco menos de espaço em Y no mobile */
+.custom-send-button {
+  background-color: #2563eb !important; // Azul da imagem
+  color: white !important;
+  border-radius: 50% !important;
+  width: 44px !important;
+  height: 44px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+
+  mat-icon {
+    font-size: 20px;
+  }
+
+  &:disabled {
+    background-color: #94a3b8 !important;
+    opacity: 0.7;
   }
 }

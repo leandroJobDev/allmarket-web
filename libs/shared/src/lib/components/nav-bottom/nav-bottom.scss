@@ -1,50 +1,90 @@
+/* --- ESTILO MOBILE (PADRÃO) --- */
 .bottom-nav {
-  /* Mobile: continua fixo embaixo com botões distribuídos */
-  position: fixed;
+  position: fixed; /* Fixa no rodapé */
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background: white;
+  background: #ffffff;
   border-top: 1px solid #f1f1f1;
+  width: 100%;
+  padding-bottom: env(safe-area-inset-bottom); /* Suporte para iPhones novos */
 
   .nav-container {
-    height: 64px;
     display: flex;
-    justify-content: space-around; /* Distribuição simétrica no mobile */
+    justify-content: space-around; /* Distribui ícones simetricamente */
     align-items: center;
+    height: 64px;
     width: 100%;
+  }
+
+  .nav-item {
+    display: flex !important;
+    flex-direction: column !important; /* Ícone em cima do texto no mobile */
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    flex: 1;
+
+    mat-icon {
+      font-size: 24px;
+      margin-bottom: 2px;
+      color: #94a3b8;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    &.active {
+      color: #2563eb;
+      mat-icon { color: #2563eb; }
+    }
   }
 }
 
+/* --- ESTILO DESKTOP (AJUSTES CONFORME A IMAGEM) --- */
 @media (min-width: 1024px) {
   .bottom-nav {
-    position: relative !important;
+    position: relative !important; /* Deixa de ser fixo no rodapé */
     bottom: auto;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee; /* Adicionado para separar do conteúdo */
-    background: #ffffff;
+    background: #f9fafb; 
+    border: none !important;
+    padding-bottom: 0;
     
     .nav-container {
-      height: 50px;
-      max-width: 1280px; /* Limite do conteúdo */
+      height: 60px;
+      max-width: 1280px;
       margin: 0 auto;
-      
-      /* O SEGREDO ESTÁ AQUI: */
-      display: flex;
-      justify-content: space-between; /* Espalha os botões do início ao fim do container */
-      padding: 0 16px; /* Mesma margem lateral do nav-top (favicon/botão sair) */
-      gap: 0; /* Remove o gap fixo para o espaço ser automático */
+      justify-content: center; /* Centraliza as pílulas como na imagem */
+      gap: 24px;
+      padding: 0 16px;
     }
 
     .nav-item {
-      flex: 1; /* Faz cada botão ocupar o mesmo espaço disponível */
-      max-width: 250px; /* Evita que o botão fique largo demais em telas gigantes */
-      flex-direction: row !important;
-      gap: 8px;
-      
-      mat-icon { margin-bottom: 0; font-size: 20px; }
-      .nav-label { font-size: 13px; }
+      flex: none !important;
+      height: 44px !important;
+      padding: 0 24px !important;
+      border-radius: 12px !important;
+      flex-direction: row !important; /* Ícone ao lado do texto no desktop */
+      gap: 10px;
+
+      mat-icon { 
+        font-size: 20px;
+        margin-bottom: 0;
+      }
+
+      .nav-label { 
+        font-size: 14px;
+      }
+
+      &.active {
+        background: white !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
     }
   }
 }
