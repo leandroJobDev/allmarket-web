@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Navbar, ProcessarNota, NotasApiService } from '@allmarket-web/shared';
+import { Navbar, NotasApiService, ProcessarNota } from '@allmarket-web/shared';
 
 @Component({
   standalone: true,

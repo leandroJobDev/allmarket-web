@@ -1,8 +1,8 @@
-export * from './lib/environments/environment';
+export * from '../../../notas_mfe/src/app/environments/environment';
 
-export * from './lib/components/navbar/navbar';
-export * from './lib/components/nav-top/nav-top';
-export * from './lib/components/nav-bottom/nav-bottom';
+export * from '../../../notas_mfe/src/app/components/navbar/navbar';
+export * from '../../../notas_mfe/src/app/components/nav-top/nav-top';
+export * from '../../../notas_mfe/src/app/components/nav-bottom/nav-bottom';
 
-export * from './lib/services/notas-api.service';
-export * from './lib/components/processar-nota/processar-nota';
+export * from '../../../notas_mfe/src/app/services/notas-api.service';
+export * from '../../../notas_mfe/src/app/components/processar-nota/processar-nota';
