@@ -21,6 +21,9 @@
       ],
       "notas_mfe/Routes": [
         "apps/notas_mfe/src/app/remote-entry/entry.routes.ts"
+      ],
+      "analise_mfe/Routes": [
+        "apps/analise_mfe/src/app/remote-entry/entry.routes.ts"
       ]
     }
   },
