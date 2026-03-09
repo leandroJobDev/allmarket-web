@@ -1,47 +1,71 @@
-$app-navbar-height: 80px;
+/* 1. Variáveis de Altura (Para facilitar cálculos) */
+$nav-top-height: 80px;
 $processar-height: 90px;
+$nav-bottom-desktop-height: 50px;
+$max-width-app: 1280px;
 
 .app-layout {
   min-height: 100vh;
   background: #f9fafb;
-}
-
-.processar-bar {
-  position: fixed;
-  top: $app-navbar-height;
-  left: 0;
-  right: 0;
-  height: $processar-height;
-  background: #f9fafb;
-  z-index: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 16px;
-}
-
-.processar-bar lib-processar-nota {
-  width: 100%;
-  max-width: 400px;
-  display: block;
-}
-
-.content-area {
-  min-height: 100vh;
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.has-fixed-elements .content-area {
-  justify-content: flex-start;
-  padding-top: calc(#{$app-navbar-height} + #{$processar-height} + 10px);
-}
-
-main {
   width: 100%;
+}
+
+/* 2. O Container Pai que segura NavTop + Processar + NavBottom (no desktop) */
+lib-navbar {
+  position: fixed; /* Fixa o bloco todo no topo */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column; /* Força o empilhamento vertical */
+  width: 100%;
+  background: white;
+}
+
+/* 3. Área de Conteúdo (Notas) */
+.content-area {
+  width: 100%;
+  max-width: $max-width-app;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* 4. Ajuste de Espaçamento para o conteúdo não "mergulhar" sob as barras */
+@media (min-width: 1024px) {
+  .has-fixed-elements .content-area {
+    /* No Desktop: NavTop (80) + Processar (90) + NavBottom (50) + Respiro (20) */
+    padding-top: calc(#{$nav-top-height} + #{$processar-height} + #{$nav-bottom-desktop-height} + 20px);
+    padding-bottom: 40px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .has-fixed-elements .content-area {
+    /* No Mobile: NavTop (64) + Processar (90) + Respiro (10) */
+    /* A NavBottom está fixa no rodapé, então não soma aqui no topo */
+    padding-top: calc(64px + #{$processar-height} + 10px);
+    padding-bottom: 100px; /* Espaço para não cobrir a última nota no mobile */
+  }
+}
+
+/* 5. Estilo para a barra de processar nota dentro da navbar */
+.processar-bar {
+  width: 100%;
+  height: $processar-height;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+
+  lib-processar-nota {
+    width: 100%;
+    max-width: $max-width-app;
+    padding: 0 24px;
+    display: block;
+    box-sizing: border-box;
+  }
 }

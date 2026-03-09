@@ -2,150 +2,23 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  background-color: transparent;
-  font-family: 'Inter', sans-serif;
-  padding: 0; /* Remove padding para alinhar com o card */
+  align-items: center;
 }
 
 .search-bar-wrapper {
   width: 100%;
-  max-width: 400px; /* Mesma largura do .welcome-card */
   filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.06));
 
   ::ng-deep {
     .custom-pill-field {
       width: 100%;
-
       .mat-mdc-text-field-wrapper {
         border-radius: 50px !important;
         background-color: #ffffff !important;
-        height: 56px !important; /* Altura levemente maior para destacar */
-        padding: 0 6px 0 24px !important; /* Mais respiro no início do texto */
-        display: flex;
-        align-items: center;
+        height: 56px !important;
+        padding: 0 6px 0 24px !important;
       }
-
-      .mat-mdc-form-field-flex {
-        align-items: center !important;
-      }
-
-      .mat-mdc-form-field-infix {
-        padding: 0 !important;
-        min-height: auto !important;
-        display: flex;
-        align-items: center;
-      }
-
-      .mat-mdc-form-field-subscript-wrapper {
-        display: none;
-      }
-
-      input.mat-mdc-input-element {
-        font-size: 15px !important;
-        font-weight: 400 !important;
-        color: #64748b !important;
-        margin-top: 0 !important;
-        
-        &::placeholder {
-          color: #94a3b8 !important;
-        }
-      }
-
-      .mdc-notched-outline__leading,
-      .mdc-notched-outline__notch,
-      .mdc-notched-outline__trailing {
-        border-color: rgba(0, 0, 0, 0.03) !important;
-      }
+      .mat-mdc-form-field-subscript-wrapper { display: none; }
     }
-  }
-}
-
-.custom-send-button {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
-  width: 44px !important;
-  height: 44px !important;
-  transition: all 0.2s ease-in-out;
-  min-width: 44px !important;
-  padding: 8px !important;
-
-  &:hover:not(:disabled) {
-    background-color: #1d4ed8 !important;
-    transform: scale(1.05);
-  }
-
-  &:disabled {
-    background-color: #cbd5e1 !important;
-    color: #f8fafc !important;
-  }
-
-  mat-icon {
-    font-size: 20px !important;
-    width: 20px !important;
-    height: 20px !important;
-    color: #ffffff !important;
-  }
-}
-
-::ng-deep .mat-mdc-icon-button.custom-send-button,
-::ng-deep button[mat-icon-button].custom-send-button {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
-  
-  &:not(:disabled) {
-    background-color: #2563eb !important;
-  }
-  
-  &:hover:not(:disabled) {
-    background-color: #1d4ed8 !important;
-  }
-  
-  &:disabled {
-    background-color: #cbd5e1 !important;
-  }
-  
-  .mat-icon {
-    color: #ffffff !important;
-  }
-  
-  mat-icon {
-    color: #ffffff !important;
-  }
-  
-  .mdc-icon-button {
-    color: #ffffff !important;
-  }
-  
-  .mdc-icon-button__state-layer {
-    background-color: rgba(37, 99, 235, 0.1) !important;
-  }
-}
-
-::ng-deep button.custom-send-button {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
-  
-  &:hover:not(:disabled) {
-    background-color: #1d4ed8 !important;
-  }
-  
-  .mdc-button__ripple {
-    background-color: rgba(37, 99, 235, 0.2) !important;
-  }
-  
-  .mdc-icon-button {
-    color: #ffffff !important;
-  }
-  
-  .mdc-icon-button__state-layer {
-    background-color: rgba(37, 99, 235, 0.1) !important;
-  }
-  
-  .mat-mdc-icon-button {
-    color: #ffffff !important;
-  }
-  
-  svg {
-    fill: #ffffff !important;
   }
 }
