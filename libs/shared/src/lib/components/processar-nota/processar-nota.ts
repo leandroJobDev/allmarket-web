@@ -39,7 +39,7 @@ export class ProcessarNota implements OnInit {
     this.isProcessando = true;
     console.log('[ProcessarNota] Processando nota:', this.urlNota);
     
-    // Simulação de processamento
+    
     setTimeout(() => {
       this.isProcessando = false;
       this.urlNota = '';

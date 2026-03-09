@@ -1,21 +1,21 @@
-/* 1. Variáveis de Altura */
+
 $nav-top-height-desktop: 80px;
 $nav-top-height-mobile: 64px;
 $processar-height: 90px;
 $nav-bottom-desktop-height: 60px;
 $max-width-app: 1280px;
 
-/* 2. Layout Base */
+
 .app-layout {
   min-height: 100vh;
   background: #f9fafb;
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow-x: hidden; /* Evita qualquer scroll horizontal residual */
+  overflow-x: hidden; 
 }
 
-/* 3. O Container Pai (Navbar completa) */
+
 lib-navbar {
   position: fixed;
   top: 0;
@@ -29,44 +29,44 @@ lib-navbar {
   box-sizing: border-box;
 }
 
-/* 4. Área de Conteúdo */
+
 .content-area {
   width: 100%;
   max-width: $max-width-app;
   margin: 0 auto;
-  padding: 0 16px; /* Padding reduzido para mobile */
+  padding: 0 16px; 
   box-sizing: border-box;
 }
 
-/* 5. Ajustes de Espaçamento (O Pulo do Gato) */
 
-/* VISAO DESKTOP */
+
+
 @media (min-width: 1024px) {
   .content-area {
-    padding: 0 24px; /* Volta para 24px no desktop */
+    padding: 0 24px; 
   }
 
   .has-fixed-elements .content-area {
-    /* Soma: Top(80) + Processar(90) + Bottom(60) + Respiro(20) = 250px */
+    
     padding-top: calc(#{$nav-top-height-desktop} + #{$processar-height} + #{$nav-bottom-desktop-height} + 20px);
     padding-bottom: 40px;
   }
 }
 
-/* VISAO MOBILE */
+
 @media (max-width: 1023px) {
   .has-fixed-elements .content-area {
-    /* Soma: Top(64) + Processar(90) + Respiro(10) = 164px */
-    /* No Mobile a nav-bottom está no rodapé, então não conta aqui */
+    
+    
     padding-top: calc(#{$nav-top-height-mobile} + #{$processar-height} + 10px);
-    padding-bottom: 100px; /* Espaço para a barra de baixo não cobrir o conteúdo */
+    padding-bottom: 100px; 
   }
 }
 
-/* 6. Estilo da Barra de Processar (Garante que não saia da tela) */
+
 .processar-bar {
   width: 100%;
-  background: #f9fafb; /* Fundo cinza conforme pedido */
+  background: #f9fafb; 
   display: flex;
   justify-content: center;
   align-items: center;

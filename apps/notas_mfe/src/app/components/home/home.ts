@@ -32,10 +32,11 @@ export class Home implements OnInit {
   notasFiltradas: any[] = [];
   notasExibidas: any[] = [];
   notaSelecionada: any = null;
-  limiteExibicao = 4;
+  limiteExibicao = 0; 
   termoBusca = '';
 
   ngOnInit() {
+    this.definirLimiteInicial();
     this.carregarDados();
   }
 
@@ -44,10 +45,12 @@ export class Home implements OnInit {
     if (email) {
       try {
         const notas = await this.apiService.getHistorico(email);
-        this.todasAsNotas = [...notas].sort((a: any, b: any) => 
+        
+        this.todasAsNotas = [...notas].sort((a: any, b: any) =>
           (b.data_emissao || '').localeCompare(a.data_emissao || '')
         );
-        this.atualizarLista();
+        
+        this.aplicarFiltrosEDados();
       } catch (error) {
         console.error(error);
       }
@@ -89,14 +92,41 @@ export class Home implements OnInit {
   filtrarHistorico(event: Event) {
     const input = event.target as HTMLInputElement;
     this.termoBusca = input.value.toLowerCase();
-    this.limiteExibicao = 4;
+    this.definirLimiteInicial(); 
     this.notaSelecionada = null;
     this.atualizarLista();
   }
 
+  private definirLimiteInicial() {
+    const width = window.innerWidth;
+    if (width < 768) {
+      this.limiteExibicao = 6;  
+    } else if (width < 1200) {
+      this.limiteExibicao = 10; 
+    } else {
+      this.limiteExibicao = 16; 
+    }
+  }
+
+  aplicarFiltrosEDados() {
+    this.notasFiltradas = this.todasAsNotas.filter(nota => {
+      const nome = nota.estabelecimento?.nome?.toLowerCase() || '';
+      return nome.includes(this.termoBusca.toLowerCase());
+    });
+
+    
+    this.notasExibidas = this.notasFiltradas.slice(0, this.limiteExibicao);
+    this.cdr.detectChanges();
+  }
+
+  
   mostrarMaisNotas() {
-    this.limiteExibicao += 4;
-    this.atualizarLista();
+    const width = window.innerWidth;
+    if (width < 768) this.limiteExibicao += 6;
+    else if (width < 1200) this.limiteExibicao += 10;
+    else this.limiteExibicao += 16;
+
+    this.aplicarFiltrosEDados();
   }
 
   limparNome(nome: string): string {

@@ -28,12 +28,12 @@ export class Login implements OnInit, AfterViewInit {
   erroMfe = false;
 
   ngOnInit() {
-    // Apenas inicializa a configuração
+    
     this.configurarGoogle();
   }
 
   ngAfterViewInit() {
-    // Garante que o container existe no HTML antes de renderizar
+    
     this.renderizarBotaoGoogle();
   }
 

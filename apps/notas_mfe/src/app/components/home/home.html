@@ -41,11 +41,12 @@
     </div>
   </ng-template>
 
-  <div class="container-ver-mais" *ngIf="temMaisNotas">
-    <button mat-flat-button color="primary" (click)="mostrarMaisNotas()" class="btn-ver-mais">
-      MOSTRAR MAIS 4 NOTAS
-    </button>
-  </div>
+ <div class="container-ver-mais" *ngIf="temMaisNotas">
+  <button mat-stroked-button (click)="mostrarMaisNotas()" class="btn-ver-mais">
+    VER MAIS NOTAS
+  </button>
+</div>
+
   <app-nota-detalhes *ngIf="notaSelecionada" [nota]="notaSelecionada" (excluir)="handleDeleteNota($event)"
     (fechar)="notaSelecionada = null">
   </app-nota-detalhes>

@@ -3,9 +3,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 16px; /* Ajustado para não vazar */
+  padding: 12px 16px; 
   background-color: #f9fafb;
-  box-sizing: border-box; /* ESSENCIAL */
+  box-sizing: border-box; 
 }
 
 .search-bar-wrapper {
@@ -16,12 +16,12 @@
     .custom-pill-field {
       width: 100%;
 
-      /* Remove bordas e sombras do Material */
+      
       .mdc-line-ripple { display: none; }
       
       .mat-mdc-text-field-wrapper {
         border-radius: 50px !important;
-        /* Fundo da pílula em cinza azulado claro para destacar do fundo do app */
+        
         background-color: #f1f5f9 !important; 
         height: 60px !important;
         padding: 0 8px 0 24px !important;
@@ -29,7 +29,7 @@
         box-shadow: none !important;
       }
 
-      /* Remove qualquer borda preta residual */
+      
       .mat-mdc-form-field-flex {
         border: none !important;
         outline: none !important;
@@ -47,9 +47,9 @@
   }
 }
 
-/* Botão de Processar Nota SEMPRE ATIVO */
+
 .custom-send-button {
-  /* Força o azul mesmo se estiver "disabled" no HTML */
+  
   background-color: #2563eb !important; 
   color: #ffffff !important;
   border-radius: 50% !important;
@@ -58,7 +58,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 1 !important; /* Sempre 100% visível */
+  opacity: 1 !important; 
   cursor: pointer !important;
 
   mat-icon {
@@ -74,7 +74,7 @@
   }
 }
 
-/* Garante que o Angular Material não pinte o botão de cinza */
+
 ::ng-deep .mat-mdc-icon-button.custom-send-button.mat-mdc-button-disabled {
   background-color: #2563eb !important;
   color: #ffffff !important;
