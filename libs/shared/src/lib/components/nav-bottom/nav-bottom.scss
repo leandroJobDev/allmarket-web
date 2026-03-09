@@ -1,21 +1,17 @@
 .bottom-nav {
-  /* Mobile: Garante que fique acima de tudo e visível */
-  position: fixed !important; 
-  bottom: 0 !important;
+  /* Mobile: continua fixo embaixo com botões distribuídos */
+  position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
-  z-index: 9999 !important; /* Valor bem alto para não sumir atrás do conteúdo */
+  z-index: 1000;
   background: white;
   border-top: 1px solid #f1f1f1;
-  width: 100%;
-
-  // Adiciona um padding extra para iPhones/telas com barra de navegação virtual
-  padding-bottom: env(safe-area-inset-bottom); 
 
   .nav-container {
     height: 64px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-around; /* Distribuição simétrica no mobile */
     align-items: center;
     width: 100%;
   }
@@ -23,19 +19,32 @@
 
 @media (min-width: 1024px) {
   .bottom-nav {
-    /* No desktop, volta para o fluxo de empilhamento embaixo do processar-nota */
-    position: relative !important; 
-    bottom: auto !important;
-    z-index: 1 !important;
+    position: relative !important;
+    bottom: auto;
     border-top: 1px solid #eee;
-    padding-bottom: 0;
+    border-bottom: 1px solid #eee; /* Adicionado para separar do conteúdo */
+    background: #ffffff;
     
     .nav-container {
       height: 50px;
-      max-width: 1280px;
+      max-width: 1280px; /* Limite do conteúdo */
       margin: 0 auto;
-      justify-content: flex-start;
-      gap: 30px;
+      
+      /* O SEGREDO ESTÁ AQUI: */
+      display: flex;
+      justify-content: space-between; /* Espalha os botões do início ao fim do container */
+      padding: 0 16px; /* Mesma margem lateral do nav-top (favicon/botão sair) */
+      gap: 0; /* Remove o gap fixo para o espaço ser automático */
+    }
+
+    .nav-item {
+      flex: 1; /* Faz cada botão ocupar o mesmo espaço disponível */
+      max-width: 250px; /* Evita que o botão fique largo demais em telas gigantes */
+      flex-direction: row !important;
+      gap: 8px;
+      
+      mat-icon { margin-bottom: 0; font-size: 20px; }
+      .nav-label { font-size: 13px; }
     }
   }
 }

@@ -3,22 +3,44 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: transparent;
+  
+  /* AJUSTE DE ESPAÇAMENTO */
+  /* Eixo Y: 12px em cima e embaixo para não colar no nav-top e nav-bottom */
+  /* Eixo X: 16px nas laterais para alinhar com o favicon do nav-top */
+  padding: 12px 16px; 
+  box-sizing: border-box;
 }
 
 .search-bar-wrapper {
   width: 100%;
+  /* Garante que o input respeite o mesmo limite máximo do nav-top */
+  max-width: 1280px; 
   filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.06));
 
   ::ng-deep {
     .custom-pill-field {
       width: 100%;
+
       .mat-mdc-text-field-wrapper {
         border-radius: 50px !important;
         background-color: #ffffff !important;
         height: 56px !important;
         padding: 0 6px 0 24px !important;
+        display: flex;
+        align-items: center;
       }
-      .mat-mdc-form-field-subscript-wrapper { display: none; }
+
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
     }
+  }
+}
+
+/* Ajuste para telas muito pequenas */
+@media (max-width: 600px) {
+  .processar-nota-container {
+    padding: 8px 16px; /* Um pouco menos de espaço em Y no mobile */
   }
 }
