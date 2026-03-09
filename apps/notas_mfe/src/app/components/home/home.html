@@ -6,27 +6,31 @@
     </div>
   </header>
 
-  <div class="search-wrapper">
-    <mat-form-field appearance="outline" class="busca-input-modern">
-      <mat-label>Buscar estabelecimento...</mat-label>
-      <input matInput (input)="filtrarHistorico($event)" placeholder="Ex: Mercado Central">
-      <mat-icon matPrefix>search</mat-icon>
-    </mat-form-field>
-  </div>
+ <div class="search-wrapper">
+  <mat-form-field appearance="outline" class="busca-input-modern">
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput (input)="filtrarHistorico($event)" placeholder="Buscar estabelecimento...">
+  </mat-form-field>
+</div>
 
   <section class="lista-grid" *ngIf="notasExibidas.length > 0; else emptyState">
-    <div *ngFor="let nota of notasExibidas" class="nota-card" [class.active]="notaSelecionada?.chave === nota.chave"
-      (click)="selecionarNota(nota)">
+    <div *ngFor="let nota of notasExibidas" 
+         class="nota-card" 
+         [class.active]="notaSelecionada?.chave === nota.chave"
+         (click)="selecionarNota(nota)">
 
-      <div class="card-row">
-        <span class="estabelecimento-nome">{{ limparNome(nota.estabelecimento?.nome) }}</span>
-        <span class="valor-total">{{ nota.valor_total | currency:'BRL' }}</span>
-      </div>
+      <div class="card-content">
+        <div class="info-principal">
+          <span class="estabelecimento-nome">{{ limparNome(nota.estabelecimento?.nome) }}</span>
+          <span class="data-compra">{{ formatarData(nota.data_emissao) }}</span>
+        </div>
 
-      <div class="card-row footer">
-        <span class="data-compra">{{ formatarData(nota.data_emissao) }}</span>
-        <span class="qtd-itens">{{ nota.itens?.length || 0 }} itens</span>
+        <div class="info-financeira">
+          <span class="valor-total">{{ nota.valor_total | currency:'BRL' }}</span>
+          <span class="qtd-itens">{{ nota.itens?.length || 0 }} itens</span>
+        </div>
       </div>
+      
     </div>
   </section>
 

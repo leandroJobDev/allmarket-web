@@ -1,70 +1,80 @@
-/* 1. Variáveis de Altura (Para facilitar cálculos) */
-$nav-top-height: 80px;
+/* 1. Variáveis de Altura */
+$nav-top-height-desktop: 80px;
+$nav-top-height-mobile: 64px;
 $processar-height: 90px;
-$nav-bottom-desktop-height: 50px;
+$nav-bottom-desktop-height: 60px;
 $max-width-app: 1280px;
 
+/* 2. Layout Base */
 .app-layout {
   min-height: 100vh;
   background: #f9fafb;
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-x: hidden; /* Evita qualquer scroll horizontal residual */
 }
 
-/* 2. O Container Pai que segura NavTop + Processar + NavBottom (no desktop) */
+/* 3. O Container Pai (Navbar completa) */
 lib-navbar {
-  position: fixed; /* Fixa o bloco todo no topo */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1100;
   display: flex;
-  flex-direction: column; /* Força o empilhamento vertical */
+  flex-direction: column;
   width: 100%;
   background: white;
+  box-sizing: border-box;
 }
 
-/* 3. Área de Conteúdo (Notas) */
+/* 4. Área de Conteúdo */
 .content-area {
   width: 100%;
   max-width: $max-width-app;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 16px; /* Padding reduzido para mobile */
   box-sizing: border-box;
 }
 
-/* 4. Ajuste de Espaçamento para o conteúdo não "mergulhar" sob as barras */
+/* 5. Ajustes de Espaçamento (O Pulo do Gato) */
+
+/* VISAO DESKTOP */
 @media (min-width: 1024px) {
+  .content-area {
+    padding: 0 24px; /* Volta para 24px no desktop */
+  }
+
   .has-fixed-elements .content-area {
-    /* No Desktop: NavTop (80) + Processar (90) + NavBottom (50) + Respiro (20) */
-    padding-top: calc(#{$nav-top-height} + #{$processar-height} + #{$nav-bottom-desktop-height} + 20px);
+    /* Soma: Top(80) + Processar(90) + Bottom(60) + Respiro(20) = 250px */
+    padding-top: calc(#{$nav-top-height-desktop} + #{$processar-height} + #{$nav-bottom-desktop-height} + 20px);
     padding-bottom: 40px;
   }
 }
 
+/* VISAO MOBILE */
 @media (max-width: 1023px) {
   .has-fixed-elements .content-area {
-    /* No Mobile: NavTop (64) + Processar (90) + Respiro (10) */
-    /* A NavBottom está fixa no rodapé, então não soma aqui no topo */
-    padding-top: calc(64px + #{$processar-height} + 10px);
-    padding-bottom: 100px; /* Espaço para não cobrir a última nota no mobile */
+    /* Soma: Top(64) + Processar(90) + Respiro(10) = 164px */
+    /* No Mobile a nav-bottom está no rodapé, então não conta aqui */
+    padding-top: calc(#{$nav-top-height-mobile} + #{$processar-height} + 10px);
+    padding-bottom: 100px; /* Espaço para a barra de baixo não cobrir o conteúdo */
   }
 }
 
-/* 5. Estilo para a barra de processar nota dentro da navbar */
+/* 6. Estilo da Barra de Processar (Garante que não saia da tela) */
 .processar-bar {
   width: 100%;
-  height: $processar-height;
+  background: #f9fafb; /* Fundo cinza conforme pedido */
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
+  box-sizing: border-box;
 
   lib-processar-nota {
     width: 100%;
     max-width: $max-width-app;
-    padding: 0 24px;
     display: block;
     box-sizing: border-box;
   }

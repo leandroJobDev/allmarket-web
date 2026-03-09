@@ -3,8 +3,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 16px; // Espaçamento Y para não colar nas barras
+  padding: 12px 16px; /* Ajustado para não vazar */
   background-color: #f9fafb;
+  box-sizing: border-box; /* ESSENCIAL */
 }
 
 .search-bar-wrapper {
@@ -14,47 +15,72 @@
   ::ng-deep {
     .custom-pill-field {
       width: 100%;
+
+      /* Remove bordas e sombras do Material */
+      .mdc-line-ripple { display: none; }
       
       .mat-mdc-text-field-wrapper {
         border-radius: 50px !important;
-        background-color: #f1f5f9 !important; // Cinza claro da imagem
+        /* Fundo da pílula em cinza azulado claro para destacar do fundo do app */
+        background-color: #f1f5f9 !important; 
         height: 60px !important;
         padding: 0 8px 0 24px !important;
         border: none !important;
-        
-        .mat-mdc-form-field-flex {
-          align-items: center !important;
-        }
+        box-shadow: none !important;
       }
 
-      .mat-mdc-form-field-focus-indicator { display: none; }
+      /* Remove qualquer borda preta residual */
+      .mat-mdc-form-field-flex {
+        border: none !important;
+        outline: none !important;
+      }
+
       .mat-mdc-form-field-subscript-wrapper { display: none; }
       
       input {
         font-size: 16px !important;
         color: #64748b !important;
+        background: transparent !important;
+        &::placeholder { color: #94a3b8; }
       }
     }
   }
 }
 
+/* Botão de Processar Nota SEMPRE ATIVO */
 .custom-send-button {
-  background-color: #2563eb !important; // Azul da imagem
-  color: white !important;
+  /* Força o azul mesmo se estiver "disabled" no HTML */
+  background-color: #2563eb !important; 
+  color: #ffffff !important;
   border-radius: 50% !important;
   width: 44px !important;
   height: 44px !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  opacity: 1 !important; /* Sempre 100% visível */
+  cursor: pointer !important;
 
   mat-icon {
-    font-size: 20px;
+    font-size: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+    color: #ffffff !important;
   }
 
-  &:disabled {
-    background-color: #94a3b8 !important;
-    opacity: 0.7;
+  &:hover {
+    background-color: #1d4ed8 !important;
+    transform: scale(1.05);
+  }
+}
+
+/* Garante que o Angular Material não pinte o botão de cinza */
+::ng-deep .mat-mdc-icon-button.custom-send-button.mat-mdc-button-disabled {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  
+  mat-icon {
+    color: #ffffff !important;
   }
 }
