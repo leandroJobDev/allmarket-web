@@ -92,13 +92,11 @@ for (const f of files) {
     const cleaned = stripComments(src);
     if (cleaned !== src) {
       fs.writeFileSync(f, cleaned, 'utf8');
-      console.log('Updated', path.relative(root, f));
       changed++;
     }
   } catch (e) {
     console.error('Error processing', f, e.message);
   }
 }
-console.log(`Done. Files changed: ${changed}`);
 if (changed === 0) process.exit(0);
 else process.exit(0);

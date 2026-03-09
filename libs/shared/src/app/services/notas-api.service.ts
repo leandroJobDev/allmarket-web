@@ -12,15 +12,11 @@ export class NotasApiService {
   temNotas$ = this.temNotasSubject.asObservable();
 
   async getHistorico(email: string): Promise<any[]> {
-    console.log('[NotasApiService] Chamando getHistorico:', email);
-    console.log('[NotasApiService] URL:', `${this.apiUrl}/historico?email=${email}`);
     
     try {
       const notas = await firstValueFrom(
         this.http.get<any[]>(`${this.apiUrl}/historico?email=${email}`)
-      );
-      
-      console.log('[NotasApiService] Resposta bruta:', notas);
+      );      
 
       const lista = Array.isArray(notas) ? notas.filter(n => {
         const temChave = n.chave && n.chave !== "";
@@ -28,7 +24,6 @@ export class NotasApiService {
         return temChave;
       }) : [];
 
-      console.log('[NotasApiService] Lista final processada:', lista);
       this.temNotasSubject.next(lista.length > 0);
       return lista;
     } catch (error) {
@@ -38,7 +33,6 @@ export class NotasApiService {
   }
 
   async excluirNota(chave: string, email: string): Promise<boolean> {
-    console.log('[NotasApiService] Excluindo nota:', chave, 'do usuário:', email);
     try {
       await firstValueFrom(
         this.http.delete(`${this.apiUrl}/historico/${chave}?email=${email}`)
@@ -66,7 +60,6 @@ export class NotasApiService {
   }
 
   async validarEAtualizarNotas(email: string): Promise<boolean> {
-    console.log('[NotasApiService] Validando estado para:', email);
     const notas = await this.getHistorico(email);
     const existe = notas.length > 0;
     this.temNotasSubject.next(existe);

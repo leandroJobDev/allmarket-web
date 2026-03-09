@@ -27,7 +27,6 @@ export class ProcessarNota implements OnInit {
   isProcessando: boolean = false;
 
   ngOnInit() {
-    console.log('[ProcessarNota] component initialized');
   }
 
   enviarNota() {
@@ -36,9 +35,7 @@ export class ProcessarNota implements OnInit {
       return;
     }
     
-    this.isProcessando = true;
-    console.log('[ProcessarNota] Processando nota:', this.urlNota);
-    
+    this.isProcessando = true;    
     
     setTimeout(() => {
       this.isProcessando = false;
