@@ -23,6 +23,9 @@ export class Home implements OnInit {
   
   itens: ItemLista[] = [];
   lojasRecentes: any[] = [];
+  lojaSelecionada: any = null;
+  itensParaEscolher: any[] = [];
+  
   storageKey = 'allmarket_lista_compras';
   userEmailKey = 'allmarket_user_email';
 
@@ -55,18 +58,32 @@ export class Home implements OnInit {
       this.lojasRecentes = Array.from(lojasUnicas.values()).slice(0, 10);
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Erro:', error);
+      console.error(error);
     }
   }
 
-  importarItensDaLoja(loja: any) {
-    loja.itens.forEach((p: any) => {
-      const nome = p.nome.toUpperCase().trim();
-      if (!this.itens.find(i => i.nome === nome)) {
-        this.itens.unshift({ nome, comprado: false });
+  abrirEscolhaItens(loja: any) {
+    this.lojaSelecionada = loja;
+    this.itensParaEscolher = loja.itens.map((p: any) => ({
+      nome: p.nome.toUpperCase().trim(),
+      selecionado: false
+    }));
+  }
+
+  confirmarSelecao() {
+    const selecionados = this.itensParaEscolher.filter(i => i.selecionado);
+    selecionados.forEach(item => {
+      if (!this.itens.find(i => i.nome === item.nome)) {
+        this.itens.unshift({ nome: item.nome, comprado: false });
       }
     });
     this.salvarNoStorage();
+    this.fecharSelecao();
+  }
+
+  fecharSelecao() {
+    this.lojaSelecionada = null;
+    this.itensParaEscolher = [];
   }
 
   adicionarItem(input: HTMLInputElement | string) {
