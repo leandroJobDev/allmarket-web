@@ -4,34 +4,198 @@
       "target": "shell-oficial",
       "public": "dist/apps/allmarket",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "**/*.js",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            }
+          ]
+        },
+        {
+          "source": "**/*.mjs",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            }
+          ]
+        }
+      ],
       "rewrites": [{ "source": "**", "destination": "/index.html" }]
     },
     {
       "target": "notas-mfe",
       "public": "dist/apps/notas_mfe",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "headers": [{ "source": "/**", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }],
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.mjs",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        }
+      ],
       "rewrites": [{ "source": "**", "destination": "/index.html" }]
     },
     {
       "target": "analise-mfe",
       "public": "dist/apps/analise_mfe",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "headers": [{ "source": "/**", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }],
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.mjs",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        }
+      ],
       "rewrites": [{ "source": "**", "destination": "/index.html" }]
     },
     {
       "target": "comparador-mfe",
       "public": "dist/apps/comparador_mfe",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "headers": [{ "source": "/**", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }],
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.mjs",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        }
+      ],
       "rewrites": [{ "source": "**", "destination": "/index.html" }]
     },
     {
       "target": "listas-mfe",
       "public": "dist/apps/listas_mfe",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "headers": [{ "source": "/**", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }],
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        },
+        {
+          "source": "**/*.mjs",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/javascript"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ]
+        }
+      ],
       "rewrites": [{ "source": "**", "destination": "/index.html" }]
     }
   ]

@@ -40,7 +40,15 @@
           "outputHashing": "all",
           "customWebpackConfig": {
             "path": "apps/allmarket/webpack.prod.config.ts"
-          }
+          },
+          "fileReplacements": [
+            {
+              "replace": "libs/shared/src/app/environments/environment.ts",
+              "with": "libs/shared/src/app/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "buildOptimizer": true
         },
         "development": {
           "buildOptimizer": false,
