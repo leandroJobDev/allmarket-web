@@ -1,0 +1,9 @@
+{
+  "name": "comparador_mfe-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/comparador_mfe-e2e/src",
+  "implicitDependencies": ["comparador_mfe"],
+  "// targets": "to see all targets run: nx show project comparador_mfe-e2e --web",
+  "targets": {}
+}
