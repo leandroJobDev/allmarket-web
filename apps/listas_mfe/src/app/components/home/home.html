@@ -1,1 +1,39 @@
-<p>home works!</p>
+<div class="lista-container">
+  <div class="add-header">
+    <mat-form-field appearance="outline" class="add-field">
+      <mat-label>Adicionar item na lista...</mat-label>
+      <input matInput #itemInput (keyup.enter)="adicionarItem(itemInput)" placeholder="Ex: Arroz">
+      <button mat-icon-button matSuffix (click)="adicionarItem(itemInput)" color="primary">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <div class="lista-content" *ngIf="itens.length > 0; else emptyState">
+    <ul class="items-list">
+      <li *ngFor="let item of itens; let i = index" class="item-row">
+        <div class="item-main">
+          <mat-checkbox 
+            [(ngModel)]="item.comprado" 
+            (change)="salvarNoStorage()"
+            color="primary">
+          </mat-checkbox>
+          <span class="item-texto" [class.comprado]="item.comprado">
+            {{ item.nome }}
+          </span>
+        </div>
+        
+        <button mat-icon-button class="btn-delete" (click)="removerItem(i)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <mat-icon>checklist</mat-icon>
+      <p>Sua lista está vazia.<br>Comece a adicionar itens para sua próxima compra!</p>
+    </div>
+  </ng-template>
+</div>

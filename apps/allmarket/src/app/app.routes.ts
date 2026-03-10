@@ -34,6 +34,12 @@ export const appRoutes: Route[] = [
     canActivate: [authGuard]
   },
   {
+    path: 'listas',
+    loadChildren: () =>
+      loadRemoteModule('listas_mfe', './Routes').then((m) => m.remoteRoutes),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',

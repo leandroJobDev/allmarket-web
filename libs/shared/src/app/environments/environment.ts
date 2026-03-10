@@ -4,5 +4,6 @@ export const environment = {
   apiUrl: 'https://allmarket-api.onrender.com',
   notasMfeUrl: 'http://localhost:4201',
   analiseMfeUrl: 'http://localhost:4202',
-  comparadorMfeUrl: 'http://localhost:4203'
+  comparadorMfeUrl: 'http://localhost:4203',
+  listasMfeUrl: 'http://localhost:4204'
 };
