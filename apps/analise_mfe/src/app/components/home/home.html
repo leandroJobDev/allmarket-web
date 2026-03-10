@@ -1,4 +1,15 @@
-<div class="home-container">
-  <h1>Análise</h1>
-  <p>Página de análise em desenvolvimento</p>
+<div class="analise-container">
+  <mat-card class="dashboard-card">
+    <mat-card-content>
+      <div class="volume-box">
+        <span class="label">Volume Total</span>
+        <h2 class="valor">{{ totalGeral | currency:'BRL' }}</h2>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-item"><canvas id="barChart"></canvas></div>
+        <div class="chart-item"><canvas id="pieChart"></canvas></div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

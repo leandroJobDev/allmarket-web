@@ -12,7 +12,6 @@ export class NotasApiService {
   temNotas$ = this.temNotasSubject.asObservable();
 
   async getHistorico(email: string): Promise<any[]> {
-    
     try {
       const notas = await firstValueFrom(
         this.http.get<any[]>(`${this.apiUrl}/historico?email=${email}`)
@@ -20,14 +19,12 @@ export class NotasApiService {
 
       const lista = Array.isArray(notas) ? notas.filter(n => {
         const temChave = n.chave && n.chave !== "";
-        if (!temChave) console.warn('[NotasApiService] Nota sem chave ignorada:', n);
         return temChave;
       }) : [];
 
       this.temNotasSubject.next(lista.length > 0);
       return lista;
     } catch (error) {
-      console.error('[NotasApiService] Erro na requisição:', error);
       return [];
     }
   }
@@ -40,7 +37,6 @@ export class NotasApiService {
       await this.validarEAtualizarNotas(email);
       return true;
     } catch (error) {
-      console.error('[NotasApiService] Erro ao excluir:', error);
       return false;
     }
   }

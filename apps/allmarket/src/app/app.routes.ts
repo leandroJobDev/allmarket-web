@@ -18,24 +18,13 @@ export const appRoutes: Route[] = [
   {
     path: 'notas',
     loadChildren: () =>
-      
       loadRemoteModule('notas_mfe', './Routes').then((m) => m.remoteRoutes),
     canActivate: [authGuard]
   },
   {
     path: 'analise',
-    loadChildren: () => {
-      console.log('🚀 Carregando analise_mfe...');
-      return loadRemoteModule('analise_mfe', './Routes')
-        .then((m) => {
-          console.log('✅ analise_mfe carregado:', m);
-          return m.remoteRoutes;
-        })
-        .catch((err) => {
-          console.error('❌ Erro ao carregar analise_mfe:', err);
-          throw err;
-        });
-    },
+    loadChildren: () =>
+      loadRemoteModule('analise_mfe', './Routes').then((m) => m.remoteRoutes),
     canActivate: [authGuard]
   },
   {

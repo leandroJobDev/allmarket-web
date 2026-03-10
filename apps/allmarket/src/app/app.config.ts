@@ -5,11 +5,6 @@ import { appRoutes } from './app.routes';
 import { setRemoteDefinitions } from '@nx/angular/mf';
 import { environment } from '@allmarket-web/shared';
 
-console.log('🔧 Configurando remotes:', {
-  notas_mfe: environment.notasMfeUrl,
-  analise_mfe: environment.analiseMfeUrl
-});
-
 setRemoteDefinitions({
   'notas_mfe': environment.notasMfeUrl,
   'analise_mfe': environment.analiseMfeUrl,
