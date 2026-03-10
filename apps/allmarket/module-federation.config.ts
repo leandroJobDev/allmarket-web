@@ -4,7 +4,8 @@ const config: ModuleFederationConfig = {
   name: 'allmarket',
   remotes: {
     "notas_mfe": "http://localhost:4201",
-    "analise_mfe": "http://localhost:4202"
+    "analise_mfe": "http://localhost:4202",
+    "comparador_mfe": "http://localhost:4203"
   },
 };
 export default config;

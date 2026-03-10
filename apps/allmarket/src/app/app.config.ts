@@ -8,6 +8,7 @@ import { environment } from '@allmarket-web/shared';
 setRemoteDefinitions({
   'notas_mfe': environment.notasMfeUrl,
   'analise_mfe': environment.analiseMfeUrl,
+  'comparador_mfe': environment.comparadorMfeUrl,
 });
 
 export const appConfig: ApplicationConfig = {

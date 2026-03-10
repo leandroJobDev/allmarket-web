@@ -28,6 +28,12 @@ export const appRoutes: Route[] = [
     canActivate: [authGuard]
   },
   {
+    path: 'comparador',
+    loadChildren: () =>
+      loadRemoteModule('comparador_mfe', './Routes').then((m) => m.remoteRoutes),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',
