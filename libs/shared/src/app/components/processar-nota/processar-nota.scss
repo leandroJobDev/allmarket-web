@@ -16,20 +16,17 @@
     .custom-pill-field {
       width: 100%;
 
-      
       .mdc-line-ripple { display: none; }
       
       .mat-mdc-text-field-wrapper {
         border-radius: 50px !important;
-        
-        background-color: #f1f5f9 !important; 
+        background-color: #ffffff !important; // ALTERADO PARA BRANCO
         height: 60px !important;
         padding: 0 8px 0 24px !important;
-        border: none !important;
-        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important; // ADICIONADA BORDA SUTIL
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important; // SOMBRA LEVE
       }
 
-      
       .mat-mdc-form-field-flex {
         border: none !important;
         outline: none !important;
@@ -39,7 +36,7 @@
       
       input {
         font-size: 16px !important;
-        color: #64748b !important;
+        color: #1e293b !important; // Cor de texto mais escura para fundo branco
         background: transparent !important;
         &::placeholder { color: #94a3b8; }
       }
@@ -47,9 +44,7 @@
   }
 }
 
-
 .custom-send-button {
-  
   background-color: #2563eb !important; 
   color: #ffffff !important;
   border-radius: 50% !important;
@@ -73,7 +68,6 @@
     transform: scale(1.05);
   }
 }
-
 
 ::ng-deep .mat-mdc-icon-button.custom-send-button.mat-mdc-button-disabled {
   background-color: #2563eb !important;

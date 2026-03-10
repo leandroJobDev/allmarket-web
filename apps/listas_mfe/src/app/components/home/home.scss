@@ -1,17 +1,45 @@
 .lista-container {
-  padding: 20px;
   max-width: 600px;
   margin: 0 auto;
-  min-height: 100vh;
   background-color: #f9fafb;
+  min-height: 100vh;
+  padding: 20px; // Padding padrão para Desktop
 
-  .add-header {
+  .add-item-wrapper {
     margin-bottom: 24px;
-    .add-field {
-      width: 100%;
-      ::v-deep .mat-mdc-text-field-wrapper {
-        background: white !important;
-        border-radius: 20px !important;
+    
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 50px;
+      padding: 6px 6px 6px 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+      .custom-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #1e293b;
+        font-size: 14px;
+        font-weight: 600;
+        outline: none;
+        &::placeholder { color: #94a3b8; }
+      }
+
+      .btn-add {
+        background: #2563eb;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        mat-icon { font-size: 24px; }
       }
     }
   }
@@ -19,70 +47,222 @@
   .items-list {
     list-style: none;
     padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
 
     .item-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #f3f4f6; // gray-50/100
-      padding: 8px 16px;
-      border-radius: 16px;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: #ebf2ff;
-      }
-
+      background: white;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid #f1f5f9;
+      
       .item-main {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
         flex: 1;
 
         .item-texto {
-          font-size: 14px;
-          font-weight: 700;
+          font-size: 13px;
+          font-weight: 800;
           color: #374151;
           text-transform: uppercase;
-          transition: all 0.3s ease;
 
           &.comprado {
             text-decoration: line-through;
-            opacity: 0.5;
-            color: #9ca3af;
+            opacity: 0.4;
           }
         }
       }
 
       .btn-delete {
+        background: transparent;
+        border: none;
         color: #d1d5db;
-        &:hover {
-          color: #ef4444;
-        }
+        mat-icon { font-size: 20px; }
       }
     }
   }
 
   .empty-state {
     text-align: center;
-    padding: 80px 20px;
-    color: #9ca3af;
-    mat-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      margin-bottom: 16px;
-    }
-    p { font-weight: 500; }
+    padding-top: 60px;
+    color: #cbd5e1;
+    mat-icon { font-size: 48px; }
   }
 }
 
-// Ajuste para mobile nav
+.sugestoes-container {
+  margin-bottom: 24px;
+  padding: 0 16px;
+
+  .sugestao-titulo {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .sugestoes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .sugestao-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f5f9;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+    &:hover { background: #e2e8f0; }
+    &:active { transform: scale(0.95); }
+  }
+}
+
+.lojas-section {
+  margin: 0 -20px 24px -20px; // Estende até a borda da tela no mobile
+  padding: 0 20px;
+
+  .header-rolagem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 0 5px;
+
+    .secao-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+    
+    .swipe-icon {
+      font-size: 16px;
+      color: #cbd5e1;
+      animation: swipeAnim 2s infinite;
+    }
+  }
+
+  .lojas-scroll-viewport {
+    overflow-x: auto;
+    padding-bottom: 12px; // Espaço para a barra de rolagem aparecer
+    display: flex;
+    
+    // Estilização da Barra de Rolagem
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .lojas-wrapper {
+      display: flex;
+      gap: 12px;
+      padding-right: 20px; // Garante que o último não cole na borda
+
+      .loja-card {
+        flex: 0 0 115px; // Largura fixa para forçar o corte visual
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 12px 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.2s;
+        cursor: pointer;
+
+        .icon-circle {
+          width: 36px;
+          height: 36px;
+          background: #eff6ff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 8px;
+          mat-icon { color: #2563eb; font-size: 20px; }
+        }
+
+        .loja-nome {
+          font-size: 10px;
+          font-weight: 800;
+          color: #1e293b;
+          text-align: center;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          text-transform: uppercase;
+        }
+
+        .loja-count {
+          font-size: 9px;
+          color: #94a3b8;
+          margin-top: 2px;
+        }
+
+        &:active { background: #f8fafc; transform: translateY(2px); }
+      }
+    }
+  }
+}
+
+@keyframes swipeAnim {
+  0% { transform: translateX(0); opacity: 0.5; }
+  50% { transform: translateX(5px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 0.5; }
+}
+
+// Visão Mobile (Estilo Notas MFE)
 @media (max-width: 768px) {
   .lista-container {
-    padding-bottom: 100px;
+    padding: 10px 0; // Remove padding lateral do container
+    padding-bottom: 120px;
+
+    .add-item-wrapper {
+      padding: 0 16px; // Mantém o input com margem interna
+    }
+
+    .items-list {
+      gap: 1px; // Itens colados um no outro com divisória mínima
+      
+      .item-row {
+        border-radius: 0; // Remove arredondamento lateral
+        border-left: none;
+        border-right: none;
+        padding: 16px; // Aumenta área de toque
+      }
+    }
+  }
+}
+
+::v-deep .mat-mdc-checkbox {
+  .mdc-checkbox__background {
+    border-radius: 6px !important;
   }
 }

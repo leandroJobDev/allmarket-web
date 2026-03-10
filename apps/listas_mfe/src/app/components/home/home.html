@@ -1,39 +1,51 @@
 <div class="lista-container">
-  <div class="add-header">
-    <mat-form-field appearance="outline" class="add-field">
-      <mat-label>Adicionar item na lista...</mat-label>
-      <input matInput #itemInput (keyup.enter)="adicionarItem(itemInput)" placeholder="Ex: Arroz">
-      <button mat-icon-button matSuffix (click)="adicionarItem(itemInput)" color="primary">
-        <mat-icon>add_circle</mat-icon>
-      </button>
-    </mat-form-field>
-  </div>
-
-  <div class="lista-content" *ngIf="itens.length > 0; else emptyState">
-    <ul class="items-list">
-      <li *ngFor="let item of itens; let i = index" class="item-row">
-        <div class="item-main">
-          <mat-checkbox 
-            [(ngModel)]="item.comprado" 
-            (change)="salvarNoStorage()"
-            color="primary">
-          </mat-checkbox>
-          <span class="item-texto" [class.comprado]="item.comprado">
-            {{ item.nome }}
-          </span>
+    <div class="add-item-wrapper">
+        <div class="input-group">
+            <input type="text" #itemInput (keyup.enter)="adicionarItem(itemInput)"
+                placeholder="O que você precisa comprar?" class="custom-input">
+            <button class="btn-add" (click)="adicionarItem(itemInput)">
+                <mat-icon>add</mat-icon>
+            </button>
         </div>
-        
-        <button mat-icon-button class="btn-delete" (click)="removerItem(i)">
-          <mat-icon>delete_outline</mat-icon>
-        </button>
-      </li>
-    </ul>
-  </div>
-
-  <ng-template #emptyState>
-    <div class="empty-state">
-      <mat-icon>checklist</mat-icon>
-      <p>Sua lista está vazia.<br>Comece a adicionar itens para sua próxima compra!</p>
     </div>
-  </ng-template>
+
+    <div class="lojas-section" *ngIf="lojasRecentes.length > 0">
+        <div class="header-rolagem">
+            <p class="secao-label">Compras anteriores</p>
+            <mat-icon class="swipe-icon">keyboard_double_arrow_right</mat-icon>
+        </div>
+
+        <div class="lojas-scroll-viewport">
+            <div class="lojas-wrapper">
+                <button *ngFor="let loja of lojasRecentes" (click)="importarItensDaLoja(loja)" class="loja-card">
+                    <div class="icon-circle">
+                        <mat-icon>local_mall</mat-icon>
+                    </div>
+                    <span class="loja-nome">{{ loja.nome }}</span>
+                    <span class="loja-count">{{ loja.itens.length }} itens</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="lista-content" *ngIf="itens.length > 0">
+        <ul class="items-list">
+            <li *ngFor="let item of itens; let i = index" class="item-row">
+                <div class="item-main">
+                    <mat-checkbox [(ngModel)]="item.comprado" (change)="salvarNoStorage()"></mat-checkbox>
+                    <span class="item-texto" [class.comprado]="item.comprado">{{ item.nome }}</span>
+                </div>
+                <button class="btn-delete" (click)="removerItem(i)">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <ng-template #emptyState>
+        <div class="empty-state">
+            <mat-icon>checklist</mat-icon>
+            <p>Sua lista está vazia.</p>
+        </div>
+    </ng-template>
 </div>
