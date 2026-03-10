@@ -27,6 +27,9 @@
       ],
       "comparador_mfe/Routes": [
         "apps/comparador_mfe/src/app/remote-entry/entry.routes.ts"
+      ],
+      "listas_mfe/Routes": [
+        "apps/listas_mfe/src/app/remote-entry/entry.routes.ts"
       ]
     }
   },
