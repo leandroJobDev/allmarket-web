@@ -2,7 +2,9 @@
   "name": "@allmarket-workspace/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build:all": "npx nx run-many -t build --configuration=production --projects=allmarket,notas_mfe,analise_mfe,comparador_mfe,listas_mfe --parallel=1"
+  },
   "private": true,
   "dependencies": {
     "@angular/cdk": "^21.2.0",

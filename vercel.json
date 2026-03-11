@@ -1,22 +1,41 @@
 {
   "version": 2,
+  "buildCommand": "npm run build:all",
+  "outputDirectory": "dist",
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
+        { "key": "Access-Control-Allow-Headers", "value": "*" }
+      ]
+    },
+    {
+      "source": "**/*.@(js|mjs)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "**/index.html",
+      "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/notas-mfe/(.*)", "destination": "/dist/apps/notas_mfe/$1" },
-    { "source": "/analise-mfe/(.*)", "destination": "/dist/apps/analise_mfe/$1" },
-    { "source": "/comparador-mfe/(.*)", "destination": "/dist/apps/comparador_mfe/$1" },
-    { "source": "/listas-mfe/(.*)", "destination": "/dist/apps/listas_mfe/$1" },
-    { "source": "/((?!.*\\.).*)", "destination": "/dist/apps/allmarket/index.html" },
-    { "source": "/(.*)", "destination": "/dist/apps/allmarket/$1" }
+    { "source": "/notas-mfe/(.*)", "destination": "/apps/notas_mfe/$1" },
+    { "source": "/notas-mfe", "destination": "/apps/notas_mfe/index.html" },
+    { "source": "/analise-mfe/(.*)", "destination": "/apps/analise_mfe/$1" },
+    { "source": "/analise-mfe", "destination": "/apps/analise_mfe/index.html" },
+    { "source": "/comparador-mfe/(.*)", "destination": "/apps/comparador_mfe/$1" },
+    { "source": "/comparador-mfe", "destination": "/apps/comparador_mfe/index.html" },
+    { "source": "/listas-mfe/(.*)", "destination": "/apps/listas_mfe/$1" },
+    { "source": "/listas-mfe", "destination": "/apps/listas_mfe/index.html" },
+    { "source": "/(.*)", "destination": "/apps/allmarket/$1" },
+    { "source": "/", "destination": "/apps/allmarket/index.html" }
   ]
 }
