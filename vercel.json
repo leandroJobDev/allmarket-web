@@ -4,7 +4,14 @@
   "outputDirectory": "dist",
   "headers": [
     {
-      "source": "**/*.@(js|mjs)",
+      "source": "/(.*).js",
+      "headers": [
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/(.*).mjs",
       "headers": [
         { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
         { "key": "Access-Control-Allow-Origin", "value": "*" }
@@ -12,11 +19,18 @@
     }
   ],
   "rewrites": [
-    { "source": "/notas-mfe/:path*", "destination": "/apps/notas_mfe/:path*" },
-    { "source": "/analise-mfe/:path*", "destination": "/apps/analise_mfe/:path*" },
-    { "source": "/comparador-mfe/:path*", "destination": "/apps/comparador_mfe/:path*" },
-    { "source": "/listas-mfe/:path*", "destination": "/apps/listas_mfe/:path*" },
-    { "source": "/:path((?!.*\\.).*)","destination": "/apps/allmarket/index.html" },
-    { "source": "/:path*", "destination": "/apps/allmarket/:path*" }
+    { "source": "/notas-mfe/(.*)", "destination": "/apps/notas_mfe/$1" },
+    { "source": "/analise-mfe/(.*)", "destination": "/apps/analise_mfe/$1" },
+    { "source": "/comparador-mfe/(.*)", "destination": "/apps/comparador_mfe/$1" },
+    { "source": "/listas-mfe/(.*)", "destination": "/apps/listas_mfe/$1" },
+    { "source": "/(.*)", "destination": "/apps/allmarket/$1" }
+  ],
+  "routes": [
+    { "src": "/notas-mfe/(.*)", "dest": "/apps/notas_mfe/$1" },
+    { "src": "/analise-mfe/(.*)", "dest": "/apps/analise_mfe/$1" },
+    { "src": "/comparador-mfe/(.*)", "dest": "/apps/comparador_mfe/$1" },
+    { "src": "/listas-mfe/(.*)", "dest": "/apps/listas_mfe/$1" },
+    { "src": "/(.*)\\.(js|mjs|css|json|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)", "dest": "/apps/allmarket/$1.$2" },
+    { "src": "/(.*)", "dest": "/apps/allmarket/index.html" }
   ]
 }
