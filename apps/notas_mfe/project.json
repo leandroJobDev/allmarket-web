@@ -43,7 +43,13 @@
           "outputHashing": "all",
           "customWebpackConfig": {
             "path": "apps/notas_mfe/webpack.prod.config.ts"
-          }
+          },
+          "fileReplacements": [
+            {
+              "replace": "libs/shared/src/app/environments/environment.ts",
+              "with": "libs/shared/src/app/environments/environment.prod.ts"
+            }
+          ]
         },
         "development": {
           "buildOptimizer": false,

@@ -1,0 +1,68 @@
+{
+  "hosting": [
+    {
+      "target": "notas-mfe",
+      "public": "dist/apps/notas_mfe",
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" },
+            { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+          ]
+        },
+        {
+          "source": "**/*.@(js|mjs)",
+          "headers": [
+            { "key": "Content-Type", "value": "application/javascript" },
+            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" }
+          ]
+        }
+      ],
+      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+    },
+    {
+      "target": "analise-mfe",
+      "public": "dist/apps/analise_mfe",
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" }
+          ]
+        },
+        {
+          "source": "**/*.@(js|mjs)",
+          "headers": [{ "key": "Content-Type", "value": "application/javascript" }]
+        }
+      ],
+      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+    },
+    {
+      "target": "comparador-mfe",
+      "public": "dist/apps/comparador_mfe",
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" }
+          ]
+        }
+      ],
+      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+    },
+    {
+      "target": "listas-mfe",
+      "public": "dist/apps/listas_mfe",
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" }
+          ]
+        }
+      ],
+      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+    }
+  ]
+}

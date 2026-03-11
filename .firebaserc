@@ -1,0 +1,27 @@
+{
+  "projects": {
+    "default": "allmarket-9151b"
+  },
+  "targets": {
+    "allmarket-9151b": {
+      "hosting": {
+        "shell-oficial": [
+          "allmarket-oficial"
+        ],
+        "notas-mfe": [
+          "allmarket-notas-mfe"
+        ],
+        "analise-mfe": [
+          "allmarket-analise-mfe"
+        ],
+        "comparador-mfe": [
+          "allmarket-comparador-mfe"
+        ],
+        "listas-mfe": [
+          "allmarket-listas-mfe"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
