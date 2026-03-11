@@ -1,68 +1,20 @@
 {
-  "hosting": [
+  "version": 2,
+  "headers": [
     {
-      "target": "notas-mfe",
-      "public": "dist/apps/notas_mfe",
+      "source": "/(.*)",
       "headers": [
-        {
-          "source": "/**",
-          "headers": [
-            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" },
-            { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-          ]
-        },
-        {
-          "source": "**/*.@(js|mjs)",
-          "headers": [
-            { "key": "Content-Type", "value": "application/javascript" },
-            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" }
-          ]
-        }
-      ],
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
-    },
-    {
-      "target": "analise-mfe",
-      "public": "dist/apps/analise_mfe",
-      "headers": [
-        {
-          "source": "/**",
-          "headers": [
-            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" }
-          ]
-        },
-        {
-          "source": "**/*.@(js|mjs)",
-          "headers": [{ "key": "Content-Type", "value": "application/javascript" }]
-        }
-      ],
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
-    },
-    {
-      "target": "comparador-mfe",
-      "public": "dist/apps/comparador_mfe",
-      "headers": [
-        {
-          "source": "/**",
-          "headers": [
-            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" }
-          ]
-        }
-      ],
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
-    },
-    {
-      "target": "listas-mfe",
-      "public": "dist/apps/listas_mfe",
-      "headers": [
-        {
-          "source": "/**",
-          "headers": [
-            { "key": "Access-Control-Allow-Origin", "value": "https://allmarket-web.vercel.app" }
-          ]
-        }
-      ],
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
     }
+  ],
+  "rewrites": [
+    { "source": "/notas-mfe/(.*)", "destination": "/dist/apps/notas_mfe/$1" },
+    { "source": "/analise-mfe/(.*)", "destination": "/dist/apps/analise_mfe/$1" },
+    { "source": "/comparador-mfe/(.*)", "destination": "/dist/apps/comparador_mfe/$1" },
+    { "source": "/listas-mfe/(.*)", "destination": "/dist/apps/listas_mfe/$1" },
+    { "source": "/((?!.*\\.).*)", "destination": "/dist/apps/allmarket/index.html" },
+    { "source": "/(.*)", "destination": "/dist/apps/allmarket/$1" }
   ]
 }
