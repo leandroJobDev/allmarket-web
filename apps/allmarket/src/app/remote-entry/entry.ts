@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Navbar, NotasApiService } from '@allmarket-web/shared';
+import { Navbar, NotasApiService, StorageService } from '@allmarket-web/shared';
 
 @Component({
   standalone: true,
@@ -15,6 +15,7 @@ export class RemoteEntry implements OnInit {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private apiService = inject(NotasApiService);
+  private storage = inject(StorageService);
 
   exibirNavbar = false;
   exibirProcessarNota = false;
@@ -28,8 +29,8 @@ export class RemoteEntry implements OnInit {
   }
 
   async verificarStatus() {
-    const dadosUsuario = localStorage.getItem('allmarket_user');
-    const email = localStorage.getItem('allmarket_user_email');
+    const dadosUsuario = this.storage.getItem('allmarket_user');
+    const email = this.storage.getItem('allmarket_user_email');
     const url = this.router.url;
 
     if (dadosUsuario && email) {
@@ -56,8 +57,8 @@ export class RemoteEntry implements OnInit {
   }
 
   sair() {
-    localStorage.removeItem('allmarket_user');
-    localStorage.removeItem('allmarket_user_email');
+    this.storage.removeItem('allmarket_user');
+    this.storage.removeItem('allmarket_user_email');
     this.apiService.limparEstado();
     this.router.navigate(['/login']);
   }
