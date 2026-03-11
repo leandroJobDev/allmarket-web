@@ -14,7 +14,24 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@allmarket-web/shared": ["libs/shared/src/index.ts"],
+      "allmarket/Routes": [
+        "apps/allmarket/src/app/remote-entry/entry.routes.ts"
+      ],
+      "notas_mfe/Routes": [
+        "apps/notas_mfe/src/app/remote-entry/entry.routes.ts"
+      ],
+      "analise_mfe/Routes": [
+        "apps/analise_mfe/src/app/remote-entry/entry.routes.ts"
+      ],
+      "comparador_mfe/Routes": [
+        "apps/comparador_mfe/src/app/remote-entry/entry.routes.ts"
+      ],
+      "listas_mfe/Routes": [
+        "apps/listas_mfe/src/app/remote-entry/entry.routes.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

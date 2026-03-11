@@ -1,0 +1,31 @@
+<div class="comparador-container">
+  <div class="search-header">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar produto (ex: Leite, Arroz...)</mat-label>
+      <input matInput (input)="filtrarItens($event)" placeholder="Digite o nome do item">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <div class="results-grid" *ngIf="itensFiltrados.length > 0; else noResults">
+    <div class="comparador-card" *ngFor="let item of itensFiltrados">
+      <div class="card-header">
+        <div class="info-principal">
+          <span class="item-nome">{{ item.nome }}</span>
+          <span class="item-loja">{{ item.loja }}</span>
+        </div>
+        <div class="info-preco">
+          <span class="preco">{{ item.preco | currency:'BRL' }}</span>
+          <span class="data">{{ item.data }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noResults>
+    <div class="empty-state">
+      <mat-icon>manage_search</mat-icon>
+      <p>Digite o nome de um produto para comparar os preços entre os estabelecimentos.</p>
+    </div>
+  </ng-template>
+</div>

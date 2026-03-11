@@ -1,0 +1,102 @@
+.comparador-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+
+  .search-header {
+    position: sticky;
+    top: 0;
+    background: #f9fafb;
+    z-index: 10;
+    padding-bottom: 10px;
+    
+    .search-field {
+      width: 100%;
+      ::v-deep .mat-mdc-text-field-wrapper {
+        background: white !important;
+        border-radius: 12px;
+      }
+    }
+  }
+
+  .results-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .comparador-card {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #dbeafe;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .info-principal {
+      flex: 1;
+      .item-nome {
+        display: block;
+        font-size: 11px;
+        font-weight: 900;
+        color: #1f2937;
+        text-transform: uppercase;
+        line-height: 1.2;
+      }
+      .item-loja {
+        font-size: 9px;
+        font-weight: 700;
+        color: #3b82f6;
+        text-transform: uppercase;
+      }
+    }
+
+    .info-preco {
+      text-align: right;
+      .preco {
+        display: block;
+        font-size: 16px;
+        font-weight: 900;
+        color: #111827;
+      }
+      .data {
+        font-size: 9px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+    p { font-weight: 500; font-size: 14px; }
+  }
+}
+
+@media (max-width: 768px) {
+  .comparador-container {
+    padding-bottom: 100px;
+  }
+}

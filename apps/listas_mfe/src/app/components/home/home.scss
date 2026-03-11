@@ -1,0 +1,197 @@
+.lista-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  padding: 20px;
+
+  .add-item-wrapper {
+    margin-bottom: 24px;
+    
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 50px;
+      padding: 6px 6px 6px 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+      .custom-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #1e293b;
+        font-size: 14px;
+        font-weight: 600;
+        outline: none;
+        &::placeholder { color: #94a3b8; }
+      }
+
+      .btn-add {
+        background: #2563eb;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.lojas-section {
+  margin: 0 -20px 24px -20px;
+  padding: 0 20px;
+
+  .header-rolagem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    .secao-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+    
+    .swipe-icon {
+      font-size: 16px;
+      color: #cbd5e1;
+      animation: swipeAnim 2s infinite;
+    }
+  }
+
+  .lojas-scroll-viewport {
+    overflow-x: auto;
+    padding-bottom: 12px;
+    display: flex;
+    
+    &::-webkit-scrollbar { height: 4px; }
+    &::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    &::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+    .lojas-wrapper {
+      display: flex;
+      gap: 12px;
+      padding-right: 20px;
+
+      .loja-card {
+        flex: 0 0 115px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 12px 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+
+        .icon-circle {
+          width: 36px;
+          height: 36px;
+          background: #eff6ff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 8px;
+          mat-icon { color: #2563eb; font-size: 20px; }
+        }
+
+        .loja-nome {
+          font-size: 10px;
+          font-weight: 800;
+          color: #1e293b;
+          text-align: center;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          text-transform: uppercase;
+        }
+
+        .loja-count { font-size: 9px; color: #94a3b8; margin-top: 2px; }
+      }
+    }
+  }
+}
+
+.selecao-itens-container {
+  background: white;
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+
+  .selecao-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    .btn-fechar { background: none; border: none; color: #64748b; }
+    p { font-size: 14px; color: #1e293b; }
+  }
+
+  .selecao-lista {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    .item-escolha-row {
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+      .nome-p { font-size: 11px; font-weight: 700; color: #475569; margin-left: 8px; text-transform: uppercase; }
+    }
+  }
+
+  .btn-confirmar-selecao {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+}
+
+.items-list {
+  list-style: none;
+  padding: 0;
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 1px solid #e2e8f0;
+
+    .item-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      .item-texto { font-size: 14px; font-weight: 600; color: #1e293b; text-transform: uppercase; }
+      .comprado { text-decoration: line-through; opacity: 0.5; }
+    }
+    .btn-delete { background: none; border: none; color: #94a3b8; }
+  }
+}
+
+@keyframes swipeAnim {
+  0%, 100% { transform: translateX(0); opacity: 0.5; }
+  50% { transform: translateX(5px); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .lista-container { padding: 10px 16px 120px 16px; }
+}

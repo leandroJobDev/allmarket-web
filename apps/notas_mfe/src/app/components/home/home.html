@@ -1,0 +1,53 @@
+<div class="home-container animate-in">
+  <header class="header-info">
+    <div class="count-badge">
+      <mat-icon>receipt_long</mat-icon>
+      <span>{{ todasAsNotas.length }} NOTAS ENCONTRADAS</span>
+    </div>
+  </header>
+
+ <div class="search-wrapper">
+  <mat-form-field appearance="outline" class="busca-input-modern">
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput (input)="filtrarHistorico($event)" placeholder="Buscar estabelecimento...">
+  </mat-form-field>
+</div>
+
+  <section class="lista-grid" *ngIf="notasExibidas.length > 0; else emptyState">
+    <div *ngFor="let nota of notasExibidas" 
+         class="nota-card" 
+         [class.active]="notaSelecionada?.chave === nota.chave"
+         (click)="selecionarNota(nota)">
+
+      <div class="card-content">
+        <div class="info-principal">
+          <span class="estabelecimento-nome">{{ limparNome(nota.estabelecimento?.nome) }}</span>
+          <span class="data-compra">{{ formatarData(nota.data_emissao) }}</span>
+        </div>
+
+        <div class="info-financeira">
+          <span class="valor-total">{{ nota.valor_total | currency:'BRL' }}</span>
+          <span class="qtd-itens">{{ nota.itens?.length || 0 }} itens</span>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <mat-icon>inventory_2</mat-icon>
+      <h3>Nenhuma nota encontrada</h3>
+    </div>
+  </ng-template>
+
+ <div class="container-ver-mais" *ngIf="temMaisNotas">
+  <button mat-stroked-button (click)="mostrarMaisNotas()" class="btn-ver-mais">
+    VER MAIS NOTAS
+  </button>
+</div>
+
+  <app-nota-detalhes *ngIf="notaSelecionada" [nota]="notaSelecionada" (excluir)="handleDeleteNota($event)"
+    (fechar)="notaSelecionada = null">
+  </app-nota-detalhes>
+</div>

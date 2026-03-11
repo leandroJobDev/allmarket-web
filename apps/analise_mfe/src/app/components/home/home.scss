@@ -1,0 +1,60 @@
+.analise-container {
+  display: flex;
+  justify-content: center; 
+  align-items: flex-start;
+  min-height: 100vh;
+  width: 100%;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  background-color: #f9fafb;
+
+  .dashboard-card {
+    width: 100%;
+    max-width: 800px; 
+    margin: 0 auto;
+    border-radius: 2.5rem !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid #f1f5f9 !important;
+    background: white !important;
+    padding: 20px;
+  }
+}
+
+.volume-box {
+  text-align: center;
+  margin-bottom: 40px;
+  
+  .label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #94a3b8; 
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .valor {
+    font-size: 36px;
+    font-weight: 900;
+    color: #1e293b; 
+    margin: 0;
+  }
+}
+
+.charts-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: 60px;
+  width: 100%;
+
+  .chart-item {
+    height: 320px;
+    width: 100%;
+    max-width: 600px; 
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+}

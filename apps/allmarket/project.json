@@ -7,7 +7,7 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@nx/angular:webpack-browser",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/allmarket",
@@ -15,12 +15,13 @@
         "main": "apps/allmarket/src/main.ts",
         "tsConfig": "apps/allmarket/tsconfig.app.json",
         "assets": [
-          {
-            "glob": "**/*",
-            "input": "apps/allmarket/public"
-          }
+          "apps/allmarket/src/favicon.ico",
+          "apps/allmarket/src/assets"
         ],
-        "styles": ["apps/allmarket/src/styles.css"]
+        "styles": ["apps/allmarket/src/styles.css"],
+        "customWebpackConfig": {
+          "path": "apps/allmarket/webpack.config.ts"
+        }
       },
       "configurations": {
         "production": {
@@ -36,7 +37,10 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/allmarket/webpack.prod.config.ts"
+          }
         },
         "development": {
           "buildOptimizer": false,
@@ -51,7 +55,7 @@
     },
     "serve": {
       "continuous": true,
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "allmarket:build:production"
@@ -60,7 +64,10 @@
           "buildTarget": "allmarket:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "publicHost": "http://localhost:4200"
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -82,10 +89,18 @@
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
       "options": {
         "buildTarget": "allmarket:build",
-        "port": 4200,
-        "spa": true
+        "watch": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "allmarket:build:development"
+        },
+        "production": {
+          "buildTarget": "allmarket:build:production"
+        }
       }
     }
   }

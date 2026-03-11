@@ -1,0 +1,34 @@
+<div class="screen-container" *ngIf="!loading">
+    <mat-card class="login-card">
+        <mat-card-content>
+            <div class="logo-wrapper">
+                <img src="/assets/img/favicon.svg" alt="Ícone AllMarket" class="main-icon">
+            </div>
+
+            <div class="brand-section">
+                <div class="brand-name">All<span class="text-blue">M@rket</span></div>
+                <h3 class="main-title">
+                    ESCANEIA. EXAMINA.<br>
+                    <span class="text-blue">ECONOMIZA.</span>
+                </h3>
+            </div>
+
+            <div class="google-slot">
+                <div id="google-btn-container"></div>
+            </div>
+
+            <p class="welcome-text">
+                <span class="sparkle">✨</span> Conecte-se e deixe nossa<br>
+                <span class="inteligencia-text">inteligência trabalhar por você:</span><br>
+                <span class="transform-text">transformando cada nota em </span> 
+                <span class="dados-blue">dados</span><br>
+                <span class="dados-blue">que protegem seu bolso.</span>
+            </p>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<div *ngIf="loading" class="loading-state">
+    <p>Validando acesso...</p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
