@@ -3,7 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:all": "npx nx run-many -t build --configuration=production --projects=allmarket,notas_mfe,analise_mfe,comparador_mfe,listas_mfe --parallel=1"
+    "build:all": "npx nx run-many -t build --configuration=production --projects=allmarket,notas_mfe,analise_mfe,comparador_mfe,listas_mfe --parallel=1",
+    "build:shell": "npx nx build allmarket --configuration=production",
+    "build:notas": "npx nx build notas_mfe --configuration=production",
+    "build:analise": "npx nx build analise_mfe --configuration=production",
+    "build:comparador": "npx nx build comparador_mfe --configuration=production",
+    "build:listas": "npx nx build listas_mfe --configuration=production"
   },
   "private": true,
   "dependencies": {

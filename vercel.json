@@ -1,65 +1,22 @@
 {
   "version": 2,
+  "buildCommand": "npm run build:all",
+  "outputDirectory": "dist",
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "**/*.@(js|mjs)",
       "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "*"
-        }
-      ]
-    },
-    {
-      "source": "/(.*).@(js|mjs)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
       ]
     }
   ],
   "rewrites": [
-    {
-      "source": "/notas-mfe/(.*)",
-      "destination": "/apps/notas_mfe/$1"
-    },
-    {
-      "source": "/analise-mfe/(.*)",
-      "destination": "/apps/analise_mfe/$1"
-    },
-    {
-      "source": "/comparador-mfe/(.*)",
-      "destination": "/apps/comparador_mfe/$1"
-    },
-    {
-      "source": "/listas-mfe/(.*)",
-      "destination": "/apps/listas_mfe/$1"
-    },
-    {
-      "source": "/",
-      "destination": "/apps/allmarket/index.html"
-    },
-    {
-      "source": "/((?!.*\\.).*)",
-      "destination": "/apps/allmarket/index.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/apps/allmarket/$1"
-    }
+    { "source": "/notas-mfe/:path*", "destination": "/apps/notas_mfe/:path*" },
+    { "source": "/analise-mfe/:path*", "destination": "/apps/analise_mfe/:path*" },
+    { "source": "/comparador-mfe/:path*", "destination": "/apps/comparador_mfe/:path*" },
+    { "source": "/listas-mfe/:path*", "destination": "/apps/listas_mfe/:path*" },
+    { "source": "/:path((?!.*\\.).*)","destination": "/apps/allmarket/index.html" },
+    { "source": "/:path*", "destination": "/apps/allmarket/:path*" }
   ]
 }
