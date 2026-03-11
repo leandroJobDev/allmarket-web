@@ -5,6 +5,8 @@
       "source": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     }
@@ -14,6 +16,7 @@
     { "source": "/analise-mfe/(.*)", "destination": "/dist/apps/analise_mfe/$1" },
     { "source": "/comparador-mfe/(.*)", "destination": "/dist/apps/comparador_mfe/$1" },
     { "source": "/listas-mfe/(.*)", "destination": "/dist/apps/listas_mfe/$1" },
-    { "source": "/(.*)", "destination": "/dist/apps/allmarket/index.html" }
+    { "source": "/((?!.*\\.).*)", "destination": "/dist/apps/allmarket/index.html" },
+    { "source": "/(.*)", "destination": "/dist/apps/allmarket/$1" }
   ]
 }
