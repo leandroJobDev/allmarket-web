@@ -30,6 +30,7 @@
     text-align: center;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08) !important;
     border: none !important;
+    box-sizing: border-box;
 }
 
 .logo-wrapper {
@@ -52,6 +53,57 @@
     font-weight: 800;
     line-height: 1.2;
     margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+}
+
+.google-slot {
+    margin: 2rem 0;
+  width: 100%;
+    display: flex;
+    justify-content: center;
+    min-height: 44px;
+  overflow: hidden;
+
+    #google-btn-container {
+      width: 100%;
+        display: flex;
+        justify-content: center;
+      max-width: 100%;
+
+        iframe {
+          margin: 0 auto !important;
+          max-width: 100% !important;
+        }
+    }
+}
+
+.welcome-text {
+    margin-top: 2rem;
+    line-height: 1.6;
+    color: #4b5563;
+    font-size: 1.1rem;
+
+    .sparkle {
+        margin-right: 4px;
+    }
+
+    .inteligencia-text {
+        font-style: italic;
+        font-weight: 800;
+        color: #1a1a1a;
+        font-size: 1.2rem;
+    }
+
+    .transform-text {
+        color: #6b7280;
+        font-weight: 500;
+    }
+
+    .dados-blue {
+        color: #2563eb;
+        font-weight: 800;
+        display: inline-block;
+    }
 }
 
 .text-blue { color: #2563eb; }
@@ -66,40 +118,34 @@
     letter-spacing: 2px;
 }
 
-.welcome-text {
-    margin-top: 2rem;
-    line-height: 1.6;
-    color: #4b5563; // Cinza para o texto secundário
-    font-size: 1.1rem;
-
-    .sparkle {
-        margin-right: 4px;
+@media (max-width: 480px) {
+    .login-card, .welcome-card {
+        padding: 2.5rem 1.25rem !important;
+        border-radius: 2rem !important;
+        width: 100%;
     }
 
-    .inteligencia-text {
-        font-style: italic;
-        font-weight: 800; // Extra bold conforme imagem
-        color: #1a1a1a;
+    .brand-name {
+        font-size: 1.75rem;
+    }
+
+    .main-title {
         font-size: 1.2rem;
     }
 
-    .transform-text {
-        color: #6b7280;
-        font-weight: 500;
+    .welcome-text {
+        font-size: 1rem;
+        
+        .inteligencia-text {
+            font-size: 1.1rem;
+        }
     }
 
-    .dados-blue {
-        color: #2563eb; // Azul vibrante da imagem
-        font-weight: 800;
-        display: inline-block;
-    }
-}
+    .google-slot {
+    margin: 1.75rem 0;
 
-.text-blue { color: #2563eb; }
-.main-title {
-    font-size: 1.4rem;
-    font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 2rem;
-    letter-spacing: -0.02em;
+    #google-btn-container {
+      max-width: 240px;
+    }
+    }
 }

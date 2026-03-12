@@ -28,12 +28,10 @@ export class Login implements OnInit, AfterViewInit {
   erroMfe = false;
 
   ngOnInit() {
-    
     this.configurarGoogle();
   }
 
   ngAfterViewInit() {
-    
     this.renderizarBotaoGoogle();
   }
 
@@ -50,9 +48,18 @@ export class Login implements OnInit, AfterViewInit {
     const interval = setInterval(() => {
       const btnContainer = document.getElementById("google-btn-container");
       if (btnContainer && typeof google !== 'undefined') {
+        const larguraDinamica = window.innerWidth < 480 ? 240 : 320;
+
         google.accounts.id.renderButton(
           btnContainer,
-          { theme: "outline", size: "large", shape: "pill", width: 280 }
+          { 
+            theme: "outline", 
+            size: "large", 
+            shape: "pill", 
+            width: larguraDinamica,
+            text: "signin_with",
+            logo_alignment: "left"
+          }
         );
         clearInterval(interval);
       }
