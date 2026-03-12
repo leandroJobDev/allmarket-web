@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +24,7 @@ import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
   templateUrl: './home.html',
   styleUrls: ['./home.scss']
 })
-export class Home implements OnInit {
+export class Home implements OnInit, AfterViewChecked {
   private apiService = inject(NotasApiService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -32,59 +32,69 @@ export class Home implements OnInit {
   notasFiltradas: any[] = [];
   notasExibidas: any[] = [];
   notaSelecionada: any = null;
-  limiteExibicao = 0; 
+  limiteExibicao = 0;
   termoBusca = '';
+  private processandoChave = false;
 
   ngOnInit() {
     this.definirLimiteInicial();
     this.carregarDados();
   }
 
-  async carregarDados() {
-    const email = localStorage.getItem('allmarket_user_email');
-    if (email) {
-      try {
-        const notas = await this.apiService.getHistorico(email);
-        
-        this.todasAsNotas = [...notas].sort((a: any, b: any) =>
-          (b.data_emissao || '').localeCompare(a.data_emissao || '')
-        );
-        
-        this.aplicarFiltrosEDados();
-      } catch (error) {
-        console.error(error);
-      }
+  ngAfterViewChecked() {
+    const chaveParaAbrir = localStorage.getItem('allmarket_nota_chave_focus');
+    if (chaveParaAbrir && !this.processandoChave && this.todasAsNotas.length > 0) {
+      this.processandoChave = true;
+      this.verificarNotaParaAbrir(chaveParaAbrir);
     }
   }
 
-  async handleDeleteNota(chave: string) {
+  private verificarNotaParaAbrir(chave: string) {
+    const notaEncontrada = this.todasAsNotas.find(n => n.chave === chave);
+    if (notaEncontrada) {
+      this.selecionarNota(notaEncontrada);
+      localStorage.removeItem('allmarket_nota_chave_focus');
+      this.cdr.detectChanges();
+    }
+    setTimeout(() => this.processandoChave = false, 500);
+  }
+
+  async carregarDados() {
     const email = localStorage.getItem('allmarket_user_email');
-    if (email && chave) {
-      const sucesso = await this.apiService.excluirNota(chave, email);
-      if (sucesso) {
-        this.todasAsNotas = this.todasAsNotas.filter(n => n.chave !== chave);
-        this.notaSelecionada = null;
-        this.atualizarLista();
-      }
+    if (!email) return;
+
+    try {
+      this.todasAsNotas = await this.apiService.getHistorico(email);
+      this.aplicarFiltrosEDados();
+      
+      const chave = localStorage.getItem('allmarket_nota_chave_focus');
+      if (chave) this.verificarNotaParaAbrir(chave);
+    } catch (error) {
+      console.error(error);
     }
   }
 
   selecionarNota(nota: any) {
-    if (this.notaSelecionada?.chave === nota.chave) {
-      this.notaSelecionada = null;
-    } else {
-      this.notaSelecionada = nota;
-      setTimeout(() => {
-        document.getElementById('res')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    }
+    this.notaSelecionada = nota;
+    this.cdr.detectChanges();
+  }
+
+  limparNome(nome: string): string {
+    if (!nome) return '';
+    const remover = /SUPERMERCADOS?|MERCADOS?|ATACADISTA|COMERCIO|LTDA|S\/A/gi;
+    return nome.replace(remover, '').trim();
+  }
+
+  formatarData(data: string): string {
+    if (!data) return '';
+    return data.split(' ')[0];
+  }
+
+  get temMaisNotas(): boolean {
+    return this.notasFiltradas.length > this.notasExibidas.length;
   }
 
   atualizarLista() {
-    this.notasFiltradas = this.todasAsNotas.filter(nota => {
-      const nome = nota.estabelecimento?.nome?.toLowerCase() || '';
-      return nome.includes(this.termoBusca);
-    });
     this.notasExibidas = this.notasFiltradas.slice(0, this.limiteExibicao);
     this.cdr.detectChanges();
   }
@@ -92,20 +102,16 @@ export class Home implements OnInit {
   filtrarHistorico(event: Event) {
     const input = event.target as HTMLInputElement;
     this.termoBusca = input.value.toLowerCase();
-    this.definirLimiteInicial(); 
+    this.definirLimiteInicial();
     this.notaSelecionada = null;
-    this.atualizarLista();
+    this.aplicarFiltrosEDados();
   }
 
   private definirLimiteInicial() {
     const width = window.innerWidth;
-    if (width < 768) {
-      this.limiteExibicao = 6;  
-    } else if (width < 1200) {
-      this.limiteExibicao = 10; 
-    } else {
-      this.limiteExibicao = 16; 
-    }
+    if (width < 768) this.limiteExibicao = 6;
+    else if (width < 1200) this.limiteExibicao = 10;
+    else this.limiteExibicao = 16;
   }
 
   aplicarFiltrosEDados() {
@@ -113,32 +119,33 @@ export class Home implements OnInit {
       const nome = nota.estabelecimento?.nome?.toLowerCase() || '';
       return nome.includes(this.termoBusca.toLowerCase());
     });
-
-    
-    this.notasExibidas = this.notasFiltradas.slice(0, this.limiteExibicao);
-    this.cdr.detectChanges();
+    this.atualizarLista();
   }
 
-  
   mostrarMaisNotas() {
     const width = window.innerWidth;
     if (width < 768) this.limiteExibicao += 6;
     else if (width < 1200) this.limiteExibicao += 10;
     else this.limiteExibicao += 16;
-
-    this.aplicarFiltrosEDados();
+    this.atualizarLista();
   }
 
-  limparNome(nome: string): string {
-    if (!nome) return 'ESTABELECIMENTO';
-    return nome.replace(/SUPERMERCADOS?|MERCADOS?|ATACADISTA|COMERCIO|LTDA|S\/A/gi, '').trim();
-  }
-
-  formatarData(dataStr: string): string {
-    return dataStr ? dataStr.split(' ')[0] : '--/--/----';
-  }
-
-  get temMaisNotas(): boolean {
-    return this.notasExibidas.length < this.notasFiltradas.length;
+  async excluirNota(chave: string) {
+    const email = localStorage.getItem('allmarket_user_email');
+    if (!email || !chave) return;
+  
+    try {
+      const sucesso = await this.apiService.excluirNota(chave, email);
+      if (sucesso) {
+        setTimeout(() => {
+          this.notaSelecionada = null;
+          this.cdr.detectChanges();
+        }, 0);
+  
+        await this.carregarDados();
+      }
+    } catch (error) {
+      console.error("Erro ao excluir nota:", error);
+    }
   }
 }

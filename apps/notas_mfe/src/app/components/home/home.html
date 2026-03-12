@@ -47,7 +47,9 @@
   </button>
 </div>
 
-  <app-nota-detalhes *ngIf="notaSelecionada" [nota]="notaSelecionada" (excluir)="handleDeleteNota($event)"
-    (fechar)="notaSelecionada = null">
-  </app-nota-detalhes>
+<app-nota-detalhes 
+*ngIf="notaSelecionada" 
+[nota]="notaSelecionada" 
+(fechar)="notaSelecionada = null"
+(excluir)="excluirNota($event)"> </app-nota-detalhes>
 </div>

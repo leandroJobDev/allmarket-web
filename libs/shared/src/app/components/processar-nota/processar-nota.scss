@@ -78,3 +78,14 @@
     color: #ffffff !important;
   }
 }
+::ng-deep .snack-success {
+  --mdc-snackbar-container-color: #10b981; // Verde esmeralda
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  button { color: white !important; }
+}
+
+::ng-deep .snack-error {
+  --mdc-snackbar-container-color: #ef4444; // Vermelho
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  button { color: white !important; }
+}
