@@ -1,5 +1,5 @@
 <div class="lista-container">
-  <div class="add-item-wrapper" *ngIf="!lojaSelecionada">
+  <div class="add-item-wrapper">
     <div class="input-group">
       <input type="text" #itemInput (keyup.enter)="adicionarItem(itemInput)" 
              placeholder="O que você precisa comprar?" class="custom-input">
@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <div class="lojas-section" *ngIf="lojasRecentes.length > 0 && !lojaSelecionada">
+  <div class="lojas-section" *ngIf="lojasRecentes.length > 0">
     <div class="header-rolagem">
       <p class="secao-label">Sugerido por loja</p>
       <mat-icon class="swipe-icon">keyboard_double_arrow_right</mat-icon>
@@ -19,7 +19,8 @@
       <div class="lojas-wrapper">
         <button *ngFor="let loja of lojasRecentes" 
                 (click)="abrirEscolhaItens(loja)" 
-                class="loja-card">
+                class="loja-card"
+                [class.active]="lojaSelecionada?.nome === loja.nome">
           <div class="icon-circle">
             <mat-icon>local_mall</mat-icon>
           </div>
@@ -32,10 +33,10 @@
 
   <div class="selecao-itens-container" *ngIf="lojaSelecionada">
     <div class="selecao-header">
+      <p>Itens em: <strong>{{ lojaSelecionada.nome }}</strong></p>
       <button (click)="fecharSelecao()" class="btn-fechar">
         <mat-icon>close</mat-icon>
       </button>
-      <p>Itens de: <strong>{{ lojaSelecionada.nome }}</strong></p>
     </div>
     
     <div class="selecao-lista">
@@ -51,7 +52,7 @@
     </button>
   </div>
 
-  <div class="lista-content" *ngIf="itens.length > 0 && !lojaSelecionada">
+  <div class="lista-content" *ngIf="itens.length > 0">
     <ul class="items-list">
       <li *ngFor="let item of itens; let i = index" class="item-row">
         <div class="item-main">

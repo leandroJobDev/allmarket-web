@@ -187,6 +187,40 @@
   }
 }
 
+// ... manter o código anterior e adicionar/ajustar estes pontos:
+
+.lojas-wrapper {
+  .loja-card {
+    transition: all 0.2s ease;
+    &.active {
+      border-color: #2563eb;
+      background: #eff6ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+  }
+}
+
+.selecao-itens-container {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 2px solid #eff6ff; // Destaque suave
+  animation: slideDown 0.3s ease-out;
+
+  .selecao-header {
+    justify-content: space-between; // Alinha título e fechar
+    margin-bottom: 12px;
+    p { margin: 0; }
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes swipeAnim {
   0%, 100% { transform: translateX(0); opacity: 0.5; }
   50% { transform: translateX(5px); opacity: 1; }
