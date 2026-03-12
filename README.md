@@ -1,101 +1,100 @@
-# AllmarketWorkspace
+# 🛒 AllM@rket - Escaneia Examina Economiza
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+> **Plataforma escalável de gestão de consumo e inteligência de dados fiscais.**
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+O **AllM@rket** é uma solução de alta performance que automatiza a extração de dados de notas fiscais (SEFAZ) via QR Code. O sistema foi projetado sob a arquitetura de **Micro-frontends (MFE)** dentro de um **Nx Monorepo**, garantindo isolamento de domínios, escalabilidade horizontal e entregas independentes.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-## Run tasks
+## ✨ Demonstração
 
-To run the dev server for your app, use:
+<p align="center">
+<img src="./assets/img/demo.gif" alt="AllMarket MFE Demo" width="380">
+</p>
 
-```sh
-npx nx serve allmarket
+---
+
+💡 O Conceito 3E: Do Papel à Inteligência
+A arquitetura do AllM@rket foi projetada para resolver o ciclo de vida do consumo através de três pilares fundamentais, onde cada um é materializado por um Micro-frontend independente:
+
+Escaneia (notas_mfe): O ponto de entrada. Utiliza integração com a SEFAZ para transformar cupons fiscais físicos em dados digitais estruturados em milissegundos, eliminando a digitação manual.
+
+Examina (analise_mfe): O cérebro do sistema. Processa o histórico de compras para identificar padrões de consumo, variações de preços de itens específicos e métricas de inflação pessoal.
+
+Economiza (comparador_mfe & listas_mfe): O resultado prático.
+
+O Comparador cruza dados de diferentes estabelecimentos para encontrar o melhor custo-benefício.
+
+O Criador de Listas utiliza o histórico examinado para gerar listas de compras inteligentes e preditivas, garantindo que o usuário compre apenas o necessário no lugar mais barato.
+
+---
+
+## 🏗️ Arquitetura de Software
+
+A aplicação rompe com o modelo tradicional, utilizando **Module Federation** para orquestrar verticais de negócio independentes:
+
+### 1. Monorepo & Estrutura de Build
+
+Utilização do **Nx** para gerenciamento de dependências, cache distribuído e governança de código.
+
+* **Shell (allmarket):** Orquestrador principal. Responsável pelo *runtime*, autenticação centralizada (Google Identity Services) e gerenciamento de layout reativo.
+* **Micro-frontends (Remotes):**
+* `notas_mfe`: Core engine para parsing de QR Codes e gestão de registros fiscais.
+* `analise_mfe`: Módulo de inteligência de dados e analytics de consumo.
+* `comparador_mfe`: Algoritmo de comparação de preços entre estabelecimentos.
+* `listas_mfe`: Gestão reativa de listas de compras e previsão de gastos.
+
+
+
+---
+
+## 🛠️ Stack Tecnológica
+
+### Frontend de Última Geração
+
+* **Angular 21:** Implementação moderna com *Standalone Components*, `ApplicationConfig` e novos padrões de injeção de dependência.
+* **Angular Material:** UI consistente com componentes robustos (`MatTable`, `MatDialog`, `MatSnackBar`).
+* **RxJS State Management:** Gerenciamento de estado reativo via `BehaviorSubject`, garantindo que o Shell e os MFEs reajam em tempo real a mudanças de dados.
+* **Module Federation:** Carregamento dinâmico via `@nx/angular/mf`, otimizando o *First Contentful Paint*.
+
+### Autenticação & UI
+
+* **Google Identity Services:** Login seguro e simplificado.
+* **Visualização:** Integração com `Chart.js` para relatórios e `SweetAlert2` para interações críticas.
+* **Design System:** SCSS modularizado com suporte a variáveis globais para garantir unidade visual entre os micro-apps.
+
+---
+
+## 🚀 Engenharia de Operações (DevOps)
+
+### Infraestrutura Multisite
+
+Deploy automatizado via **Firebase Hosting**, utilizando múltiplos targets para permitir o ciclo de vida independente de cada módulo:
+
+* **Host:** `shell-oficial`
+* **Remotes:** `notas-mfe`, `analise-mfe`, `comparador-mfe`, `listas-mfe`
+
+### Comandos de Operação
+
+```bash
+# Inicialização do ecossistema completo (Host + Remotes)
+npx nx serve allmarket --devRemotes=notas_mfe,analise_mfe
+
+# Build paralelo otimizado por cache de artefatos
+npx nx run-many -t build --prod --parallel=3
+
+# Deploy isolado de uma vertical de negócio
+firebase deploy --only hosting:notas-mfe
+
 ```
 
-To create a production bundle:
+---
 
-```sh
-npx nx build allmarket
-```
+## ✨ Diferenciais de Engenharia
 
-To see all available targets to run for a project, run:
+1. **Lazy Loading Total:** O código de cada MFE só é transferido quando o usuário acessa a funcionalidade, reduzindo drasticamente o carregamento inicial.
+2. **Independência de Deploy:** Correções no motor de parsing (`notas_mfe`) são publicadas sem necessidade de re-buildar o sistema de autenticação (`shell`).
+3. **Consistência de Estado:** Uso de serviços compartilhados em `shared-libs` para garantir que o estado `temNotas$` seja propagado por todo o ecossistema.
+4. **Mobile-First Design:** Interface otimizada para operação rápida em campo, focada na usabilidade em dispositivos móveis.
 
-```sh
-npx nx show project allmarket
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/angular:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
