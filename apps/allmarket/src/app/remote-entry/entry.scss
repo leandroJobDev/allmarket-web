@@ -1,10 +1,8 @@
-
 $nav-top-height-desktop: 80px;
 $nav-top-height-mobile: 64px;
 $processar-height: 90px;
 $nav-bottom-desktop-height: 60px;
 $max-width-app: 1280px;
-
 
 .app-layout {
   min-height: 100vh;
@@ -12,9 +10,7 @@ $max-width-app: 1280px;
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow-x: hidden; 
 }
-
 
 lib-navbar {
   position: fixed;
@@ -22,60 +18,34 @@ lib-navbar {
   left: 0;
   right: 0;
   z-index: 1100;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background: white;
-  box-sizing: border-box;
 }
-
 
 .content-area {
   width: 100%;
   max-width: $max-width-app;
   margin: 0 auto;
-  padding: 0 16px; 
+  padding: 0 16px;
   box-sizing: border-box;
 }
 
+.has-fixed-elements .content-area {
+  padding-top: calc(#{$nav-top-height-mobile} + 20px);
+  padding-bottom: 80px;
+}
 
-
+.com-barra-processar.has-fixed-elements .content-area {
+  @media (max-width: 1023px) {
+    margin-top: $processar-height;
+  }
+}
 
 @media (min-width: 1024px) {
   .content-area {
-    padding: 0 24px; 
+    padding: 0 24px;
   }
 
   .has-fixed-elements .content-area {
-    
     padding-top: calc(#{$nav-top-height-desktop} + #{$processar-height} + #{$nav-bottom-desktop-height} + 20px);
     padding-bottom: 40px;
-  }
-}
-
-
-@media (max-width: 1023px) {
-  .has-fixed-elements .content-area {
-    
-    
-    padding-top: calc(#{$nav-top-height-mobile} + #{$processar-height} + 10px);
-    padding-bottom: 100px; 
-  }
-}
-
-
-.processar-bar {
-  width: 100%;
-  background: #f9fafb; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-
-  lib-processar-nota {
-    width: 100%;
-    max-width: $max-width-app;
-    display: block;
-    box-sizing: border-box;
   }
 }

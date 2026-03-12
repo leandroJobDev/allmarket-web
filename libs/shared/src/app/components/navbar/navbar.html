@@ -1,6 +1,5 @@
-<lib-nav-top [userData]="userData" (logout)="logout.emit()">
-</lib-nav-top>
+<lib-nav-top [userData]="userData" (logout)="logout.emit()"></lib-nav-top>
 
-<lib-processar-nota></lib-processar-nota>
+<lib-processar-nota *ngIf="exibirProcessarNota$ | async"></lib-processar-nota>
 
 <lib-nav-bottom *ngIf="showNavBottom"></lib-nav-bottom>

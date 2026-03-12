@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 import { Navbar, NotasApiService } from '@allmarket-web/shared';
 
 @Component({
@@ -54,6 +54,12 @@ export class RemoteEntry implements OnInit {
     }
     this.cdr.detectChanges();
   }
+
+  isNotasMFE$ = this.router.events.pipe(
+    filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+    map((event: NavigationEnd) => event.urlAfterRedirects.startsWith('/notas')),
+    startWith(this.router.url.startsWith('/notas'))
+  );
 
   sair() {
     localStorage.removeItem('allmarket_user');

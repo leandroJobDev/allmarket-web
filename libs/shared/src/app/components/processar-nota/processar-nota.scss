@@ -1,3 +1,8 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
 .processar-nota-container {
   width: 100%;
   display: flex;
@@ -20,11 +25,11 @@
       
       .mat-mdc-text-field-wrapper {
         border-radius: 50px !important;
-        background-color: #ffffff !important; // ALTERADO PARA BRANCO
+        background-color: #ffffff !important; 
         height: 60px !important;
         padding: 0 8px 0 24px !important;
-        border: 1px solid #e2e8f0 !important; // ADICIONADA BORDA SUTIL
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important; // SOMBRA LEVE
+        border: 1px solid #e2e8f0 !important; 
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important; 
       }
 
       .mat-mdc-form-field-flex {
@@ -36,7 +41,7 @@
       
       input {
         font-size: 16px !important;
-        color: #1e293b !important; // Cor de texto mais escura para fundo branco
+        color: #1e293b !important; 
         background: transparent !important;
         &::placeholder { color: #94a3b8; }
       }
@@ -72,20 +77,5 @@
 ::ng-deep .mat-mdc-icon-button.custom-send-button.mat-mdc-button-disabled {
   background-color: #2563eb !important;
   color: #ffffff !important;
-  opacity: 1 !important;
-  
-  mat-icon {
-    color: #ffffff !important;
-  }
-}
-::ng-deep .snack-success {
-  --mdc-snackbar-container-color: #10b981; // Verde esmeralda
-  --mdc-snackbar-supporting-text-color: #ffffff;
-  button { color: white !important; }
-}
-
-::ng-deep .snack-error {
-  --mdc-snackbar-container-color: #ef4444; // Vermelho
-  --mdc-snackbar-supporting-text-color: #ffffff;
-  button { color: white !important; }
+  opacity: 0.6 !important;
 }
