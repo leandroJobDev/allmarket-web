@@ -1,4 +1,4 @@
-# 🛒 AllM@rket - Escaneia Examina Economiza
+# 🛒 AllM@rket - APP
 
 > **Plataforma escalável de gestão de consumo e inteligência de dados fiscais.**
 
