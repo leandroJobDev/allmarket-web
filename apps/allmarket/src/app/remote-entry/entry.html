@@ -2,7 +2,12 @@
      [class.has-fixed-elements]="exibirNavbar"
      [class.com-barra-processar]="isNotasMFE$ | async">
 
-  <lib-navbar ...></lib-navbar>
+  <lib-navbar
+    *ngIf="exibirNavbar"
+    [userData]="userData"
+    [showNavBottom]="true"
+    (logout)="sair()">
+  </lib-navbar>
 
   <main class="content-area">
     <router-outlet></router-outlet>
