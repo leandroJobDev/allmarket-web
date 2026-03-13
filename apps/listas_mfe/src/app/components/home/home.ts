@@ -23,15 +23,24 @@ export class Home implements OnInit {
   
   itens: ItemLista[] = [];
   lojasRecentes: any[] = [];
+  listasSalvas: any[] = [];
   lojaSelecionada: any = null;
   itensParaEscolher: any[] = [];
   
+  nomeNovaLista: string = '';
+  exibirPainelSalvar: boolean = false;
+  
   storageKey = 'allmarket_lista_compras';
+  storageListasKey = 'allmarket_listas_salvas_db';
   userEmailKey = 'allmarket_user_email';
 
   async ngOnInit() {
     const salvo = localStorage.getItem(this.storageKey);
     if (salvo) this.itens = JSON.parse(salvo);
+    
+    const listasDB = localStorage.getItem(this.storageListasKey);
+    if (listasDB) this.listasSalvas = JSON.parse(listasDB);
+
     await this.carregarLojasRecentes();
   }
 
@@ -42,15 +51,14 @@ export class Home implements OnInit {
     try {
       const notas = await this.apiService.getHistorico(email);
       const lojasUnicas = new Map();
-      
+
       notas.forEach((nota: any) => {
-        const nomeLoja = nota.estabelecimento?.nome || 'Loja Desconhecida';
-        const nomeLimpo = nomeLoja.replace(/SUPERMERCADOS?|MERCADOS?|ATACADISTA|LTDA|S\/A/gi, '').trim();
-        
-        if (!lojasUnicas.has(nomeLimpo)) {
-          lojasUnicas.set(nomeLimpo, {
+        const nomeLoja = nota.estabelecimento?.nome;
+        if (nomeLoja && !lojasUnicas.has(nomeLoja)) {
+          const nomeLimpo = nomeLoja.replace(/SUPERMERCADOS?|MERCADOS?|ATACADISTA|LTDA|S\/A/gi, '').trim();
+          lojasUnicas.set(nomeLoja, {
             nome: nomeLimpo,
-            itens: nota.itens || nota.produtos || []
+            itens: nota.itens || []
           });
         }
       });
@@ -62,11 +70,11 @@ export class Home implements OnInit {
     }
   }
 
-  abrirEscolhaItens(loja: any) {
-    this.lojaSelecionada = loja;
-    this.itensParaEscolher = loja.itens.map((p: any) => ({
+  abrirEscolhaItens(obj: any, isLista: boolean = false) {
+    this.lojaSelecionada = obj;
+    this.itensParaEscolher = obj.itens.map((p: any) => ({
       nome: p.nome.toUpperCase().trim(),
-      selecionado: false
+      selecionado: isLista
     }));
   }
 
@@ -92,9 +100,9 @@ export class Home implements OnInit {
     if (nome) {
       if (!this.itens.find(i => i.nome === nome)) {
         this.itens.unshift({ nome, comprado: false });
+        this.salvarNoStorage();
       }
       if (typeof input !== 'string') input.value = '';
-      this.salvarNoStorage();
     }
   }
 
@@ -105,5 +113,22 @@ export class Home implements OnInit {
 
   salvarNoStorage() {
     localStorage.setItem(this.storageKey, JSON.stringify(this.itens));
+  }
+
+  salvarListaCompleta() {
+    if (!this.nomeNovaLista.trim()) return;
+
+    const novaLista = {
+      nome: this.nomeNovaLista.toUpperCase(),
+      itens: [...this.itens],
+      isListaSalva: true
+    };
+
+    this.listasSalvas.unshift(novaLista);
+    localStorage.setItem(this.storageListasKey, JSON.stringify(this.listasSalvas));
+
+    this.nomeNovaLista = '';
+    this.exibirPainelSalvar = false;
+    this.cdr.detectChanges();
   }
 }

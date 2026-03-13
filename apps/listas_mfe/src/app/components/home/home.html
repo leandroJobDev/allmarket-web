@@ -1,68 +1,62 @@
 <div class="lista-container">
-  <div class="add-item-wrapper">
-    <div class="input-group">
-      <input type="text" #itemInput (keyup.enter)="adicionarItem(itemInput)" 
-             placeholder="O que você precisa comprar?" class="custom-input">
-      <button class="btn-add" (click)="adicionarItem(itemInput)">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
-  </div>
+  <header class="list-header">
+    <h1>Minha Lista</h1>
+    <span class="item-counter">{{ itens.length }} itens</span>
+  </header>
 
-  <div class="lojas-section" *ngIf="lojasRecentes.length > 0">
-    <div class="header-rolagem">
-      <p class="secao-label">Sugerido por loja</p>
-      <mat-icon class="swipe-icon">keyboard_double_arrow_right</mat-icon>
-    </div>
-    
-    <div class="lojas-scroll-viewport">
-      <div class="lojas-wrapper">
-        <button *ngFor="let loja of lojasRecentes" 
-                (click)="abrirEscolhaItens(loja)" 
-                class="loja-card"
-                [class.active]="lojaSelecionada?.nome === loja.nome">
-          <div class="icon-circle">
-            <mat-icon>local_mall</mat-icon>
-          </div>
-          <span class="loja-nome">{{ loja.nome }}</span>
-          <span class="loja-count">{{ loja.itens.length }} itens</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div class="selecao-itens-container" *ngIf="lojaSelecionada">
-    <div class="selecao-header">
-      <p>Itens em: <strong>{{ lojaSelecionada.nome }}</strong></p>
-      <button (click)="fecharSelecao()" class="btn-fechar">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-    
-    <div class="selecao-lista">
-      <div *ngFor="let item of itensParaEscolher" class="item-escolha-row">
-        <mat-checkbox [(ngModel)]="item.selecionado" color="primary">
-          <span class="nome-p">{{ item.nome }}</span>
-        </mat-checkbox>
-      </div>
-    </div>
-
-    <button class="btn-confirmar-selecao" (click)="confirmarSelecao()">
-      Adicionar Selecionados
+  <div class="add-item-card">
+    <input type="text" #itemInput (keyup.enter)="adicionarItem(itemInput)" 
+           placeholder="O que você precisa?" class="modern-input">
+    <button class="btn-add-main" (click)="adicionarItem(itemInput)">
+      <mat-icon>add</mat-icon>
     </button>
   </div>
 
-  <div class="lista-content" *ngIf="itens.length > 0">
-    <ul class="items-list">
-      <li *ngFor="let item of itens; let i = index" class="item-row">
-        <div class="item-main">
-          <mat-checkbox [(ngModel)]="item.comprado" (change)="salvarNoStorage()"></mat-checkbox>
-          <span class="item-texto" [class.comprado]="item.comprado">{{ item.nome }}</span>
-        </div>
-        <button class="btn-delete" (click)="removerItem(i)">
-          <mat-icon>delete_outline</mat-icon>
+  <div class="suggestions-section" *ngIf="lojasRecentes.length > 0">
+    <p class="section-title">Sugestões por loja</p>
+    <div class="lojas-scroll">
+      <button *ngFor="let loja of lojasRecentes" 
+              (click)="abrirEscolhaItens(loja)" 
+              [class.active]="lojaSelecionada?.nome === loja.nome"
+              class="chip-loja">
+        <mat-icon>history</mat-icon>
+        {{ loja.nome }}
+      </button>
+    </div>
+
+    <div class="inline-selection-panel" *ngIf="lojaSelecionada">
+      <div class="panel-header">
+        <span>Itens frequentes em <strong>{{ lojaSelecionada.nome }}</strong></span>
+        <button class="btn-close" (click)="fecharSelecao()">
+          <mat-icon>close</mat-icon>
         </button>
-      </li>
-    </ul>
+      </div>
+      
+      <div class="panel-body">
+        <div *ngFor="let item of itensParaEscolher" class="selectable-item">
+          <mat-checkbox [(ngModel)]="item.selecionado" color="primary">
+            {{ item.nome }}
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <button class="btn-confirm-action" (click)="confirmarSelecao()">
+          ADICIONAR SELECIONADOS
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="items-grid">
+    <div *ngFor="let item of itens; let i = index" class="item-card-row" [class.is-comprado]="item.comprado">
+      <div class="item-info">
+        <mat-checkbox [(ngModel)]="item.comprado" (change)="salvarNoStorage()" color="primary"></mat-checkbox>
+        <span class="item-name">{{ item.nome }}</span>
+      </div>
+      <button class="btn-remove" (click)="removerItem(i)">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
