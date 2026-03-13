@@ -2,16 +2,18 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { environment } from '../environments/environment';
+import { LoadingService } from './loading';
 
 @Injectable({ providedIn: 'root' })
 export class NotasApiService {
   private http = inject(HttpClient);
+  private loadingService = inject(LoadingService);
   private apiUrl = environment.apiUrl;
 
   private temNotasSubject = new BehaviorSubject<boolean>(false);
   temNotas$ = this.temNotasSubject.asObservable();
 
-  async getHistorico(email: string): Promise<any[]> {
+  private async _internalGetHistorico(email: string): Promise<any[]> {
     try {
       const notas = await firstValueFrom(
         this.http.get<any[]>(`${this.apiUrl}/historico?email=${email}`)
@@ -29,7 +31,17 @@ export class NotasApiService {
     }
   }
 
+  async getHistorico(email: string): Promise<any[]> {
+    this.loadingService.show();
+    try {
+      return await this._internalGetHistorico(email);
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
   async excluirNota(chave: string, email: string): Promise<boolean> {
+    this.loadingService.show();
     try {
       await firstValueFrom(
         this.http.delete(`${this.apiUrl}/historico/${chave}?email=${email}`)
@@ -38,10 +50,13 @@ export class NotasApiService {
       return true;
     } catch (error) {
       return false;
+    } finally {
+      this.loadingService.hide();
     }
   }
 
   async processarNota(url: string, email: string): Promise<any> {
+    this.loadingService.show();
     try {
       const payload = { url, email };
       const resultado = await firstValueFrom(
@@ -52,11 +67,13 @@ export class NotasApiService {
     } catch (error) {
       console.error('Erro ao processar nota:', error);
       throw error;
+    } finally {
+      this.loadingService.hide();
     }
   }
 
   async validarEAtualizarNotas(email: string): Promise<boolean> {
-    const notas = await this.getHistorico(email);
+    const notas = await this._internalGetHistorico(email);
     const existe = notas.length > 0;
     this.temNotasSubject.next(existe);
     return existe;

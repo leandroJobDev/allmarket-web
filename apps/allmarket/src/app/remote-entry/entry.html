@@ -1,15 +1,21 @@
-<div class="app-layout" 
-     [class.has-fixed-elements]="exibirNavbar"
-     [class.com-barra-processar]="isNotasMFE$ | async">
+<div class="app-container">
+  <div class="loading-overlay" *ngIf="loadingService.loading$()">
+    <app-scanner-animation></app-scanner-animation>
+  </div>
 
-  <lib-navbar
-    *ngIf="exibirNavbar"
-    [userData]="userData"
-    [showNavBottom]="true"
-    (logout)="sair()">
-  </lib-navbar>
+  <div class="app-layout" 
+       [class.has-fixed-elements]="exibirNavbar"
+       [class.com-barra-processar]="isNotasMFE$ | async">
 
-  <main class="content-area">
-    <router-outlet></router-outlet>
-  </main>
+    <lib-navbar
+      *ngIf="exibirNavbar"
+      [userData]="userData"
+      [showNavBottom]="true"
+      (logout)="sair()">
+    </lib-navbar>
+
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

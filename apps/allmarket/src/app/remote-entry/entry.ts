@@ -1,12 +1,12 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { RouterModule, Router, NavigationEnd, NavigationStart, NavigationCancel, NavigationError } from '@angular/router';
 import { filter, map, startWith } from 'rxjs/operators';
-import { Navbar, NotasApiService } from '@allmarket-web/shared';
+import { Navbar, NotasApiService, ScannerAnimationComponent, LoadingService } from '@allmarket-web/shared';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, Navbar],
+  imports: [CommonModule, RouterModule, Navbar, ScannerAnimationComponent],
   selector: 'app-allmarket-entry',
   templateUrl: './entry.html',
   styleUrls: ['./entry.scss']
@@ -15,12 +15,25 @@ export class RemoteEntry implements OnInit {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private apiService = inject(NotasApiService);
+  public loadingService = inject(LoadingService);
 
   exibirNavbar = false;
   exibirProcessarNota = false;
   userData: any = null;
 
   ngOnInit() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.loadingService.show();
+      } else if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        this.loadingService.hide();
+      }
+    });
+    
     this.verificarStatus();
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
