@@ -12,21 +12,28 @@
     </button>
   </div>
 
-  <div class="suggestions-section" *ngIf="lojasRecentes.length > 0">
-    <p class="section-title">Sugestões por loja</p>
+  <div class="suggestions-section" *ngIf="lojasRecentes.length > 0 || listasSalvas.length > 0">
+    <p class="section-title">Sugestões por loja ou listas salvas</p>
     <div class="lojas-scroll">
+      
+      <button *ngFor="let lista of listasSalvas" 
+              (click)="abrirEscolhaItens(lista, true)" 
+              [class.active]="lojaSelecionada?.nome === lista.nome"
+              class="chip-loja chip-saved">
+        {{ lista.nome }}
+      </button>
+
       <button *ngFor="let loja of lojasRecentes" 
               (click)="abrirEscolhaItens(loja)" 
               [class.active]="lojaSelecionada?.nome === loja.nome"
               class="chip-loja">
-        <mat-icon>history</mat-icon>
         {{ loja.nome }}
       </button>
     </div>
 
     <div class="inline-selection-panel" *ngIf="lojaSelecionada">
       <div class="panel-header">
-        <span>Itens frequentes em <strong>{{ lojaSelecionada.nome }}</strong></span>
+        <span>Itens em <strong>{{ lojaSelecionada.nome }}</strong></span>
         <button class="btn-close" (click)="fecharSelecao()">
           <mat-icon>close</mat-icon>
         </button>
@@ -49,12 +56,28 @@
   </div>
 
   <div class="items-grid">
+    <div class="lista-actions" *ngIf="itens.length > 0">
+      <button class="btn-save-list" (click)="exibirPainelSalvar = !exibirPainelSalvar">
+        <mat-icon>save</mat-icon>
+        Salvar Lista
+      </button>
+    </div>
+
+    <div class="save-panel animate-in" *ngIf="exibirPainelSalvar">
+      <div class="input-save-group">
+        <input type="text" [(ngModel)]="nomeNovaLista" placeholder="Nome da lista..." class="save-input">
+        <button class="btn-confirm-save" [disabled]="!nomeNovaLista" (click)="salvarListaCompleta()">
+          OK
+        </button>
+      </div>
+    </div>
+
     <div *ngFor="let item of itens; let i = index" class="item-card-row" [class.is-comprado]="item.comprado">
       <div class="item-info">
         <mat-checkbox [(ngModel)]="item.comprado" (change)="salvarNoStorage()" color="primary"></mat-checkbox>
-        <span class="item-name">{{ item.nome }}</span>
+        <span class="item-nome" [class.comprado]="item.comprado">{{ item.nome }}</span>
       </div>
-      <button class="btn-remove" (click)="removerItem(i)">
+      <button class="btn-delete" (click)="removerItem(i)">
         <mat-icon>delete_outline</mat-icon>
       </button>
     </div>
