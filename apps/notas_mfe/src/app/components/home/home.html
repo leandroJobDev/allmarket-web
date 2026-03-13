@@ -6,14 +6,14 @@
     </div>
   </header>
 
- <div class="search-wrapper">
-  <mat-form-field appearance="outline" class="busca-input-modern">
-    <mat-icon matPrefix>search</mat-icon>
-    <input matInput (input)="filtrarHistorico($event)" placeholder="Buscar estabelecimento...">
-  </mat-form-field>
-</div>
+  <div class="search-wrapper">
+    <mat-form-field appearance="outline" class="busca-input-modern">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput (input)="filtrarHistorico($event)" placeholder="Buscar estabelecimento...">
+    </mat-form-field>
+  </div>
 
-  <section class="lista-grid" *ngIf="notasExibidas.length > 0; else emptyState">
+  <section class="lista-grid" *ngIf="notasExibidas.length > 0;">
     <div *ngFor="let nota of notasExibidas" 
          class="nota-card" 
          [class.active]="notaSelecionada?.chave === nota.chave"
@@ -30,26 +30,19 @@
           <span class="qtd-itens">{{ nota.itens?.length || 0 }} itens</span>
         </div>
       </div>
-      
     </div>
   </section>
 
-  <ng-template #emptyState>
-    <div class="empty-state">
-      <mat-icon>inventory_2</mat-icon>
-      <h3>Nenhuma nota encontrada</h3>
-    </div>
-  </ng-template>
+  <div class="container-ver-mais" *ngIf="temMaisNotas">
+    <button mat-stroked-button (click)="mostrarMaisNotas()" class="btn-ver-mais">
+      VER MAIS NOTAS
+    </button>
+  </div>
 
- <div class="container-ver-mais" *ngIf="temMaisNotas">
-  <button mat-stroked-button (click)="mostrarMaisNotas()" class="btn-ver-mais">
-    VER MAIS NOTAS
-  </button>
-</div>
-
-<app-nota-detalhes 
-*ngIf="notaSelecionada" 
-[nota]="notaSelecionada" 
-(fechar)="notaSelecionada = null"
-(excluir)="excluirNota($event)"> </app-nota-detalhes>
+  <app-nota-detalhes 
+    *ngIf="notaSelecionada" 
+    [nota]="notaSelecionada" 
+    (fechar)="notaSelecionada = null"
+    (excluir)="excluirNota($event)">
+  </app-nota-detalhes>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -20,14 +20,30 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
   templateUrl: './nota-detalhes.html',
   styleUrls: ['./nota-detalhes.scss'],
 })
-export class NotaDetalhes {
+export class NotaDetalhes implements OnChanges {
   private dialog = inject(MatDialog);
+  private elementRef = inject(ElementRef);
 
   @Input() nota: any;
   @Output() fechar = new EventEmitter<void>();
   @Output() excluir = new EventEmitter<string>();
 
   displayedColumns: string[] = ['item', 'valor'];
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['nota'] && changes['nota'].currentValue) {
+      this.executarRolagem();
+    }
+  }
+
+  private executarRolagem() {
+    setTimeout(() => {
+      this.elementRef.nativeElement.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+    }, 100);
+  }
 
   fecharNota() {
     this.fechar.emit();
