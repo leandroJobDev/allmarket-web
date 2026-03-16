@@ -21,7 +21,18 @@
   </div>
 
   <div class="suggestions-section" *ngIf="lojasRecentes.length > 0 || listasSalvas.length > 0">
-    <p class="section-title">Sugestões por loja ou listas salvas</p>
+    <div class="section-header">
+      <p class="section-title">Sugestões e listas salvas</p>
+      <div class="limit-selector" title="Quantidade de lojas recentes a exibir">
+        <span>Mostrar:</span>
+        <select [(ngModel)]="limiteLojas" (change)="carregarLojasRecentes()">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="50">50</option>
+        </select>
+      </div>
+    </div>
     <div class="lojas-scroll">
 
       <button *ngFor="let lista of listasSalvas" (click)="abrirEscolhaItens(lista, true)"

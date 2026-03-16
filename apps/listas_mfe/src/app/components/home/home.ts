@@ -22,6 +22,7 @@ export class Home implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   itens: ItemLista[] = [];
+  limiteLojas: number = 10;
   lojasRecentes: any[] = [];
   listasSalvas: any[] = [];
   lojaSelecionada: any = null;
@@ -97,10 +98,13 @@ export class Home implements OnInit {
     if (!email) return;
 
     try {
+      // Busca apenas o histórico necessário baseado no limite
       const notas = await this.apiService.getHistorico(email);
+      // O backend traz tudo, nós limitamos aqui para manter a performance de visualização
+      const notasLimitadas = notas.slice(0, this.limiteLojas * 2); // Pega um pouco mais para garantir lojas únicas
       const lojasUnicas = new Map();
 
-      notas.forEach((nota: any) => {
+      notasLimitadas.forEach((nota: any) => {
         const nomeLoja = nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome;
         if (nomeLoja && !lojasUnicas.has(nomeLoja)) {
           const nomeLimpo = nomeLoja.replace(/SUPERMERCADOS?|MERCADOS?|ATACADISTA|LTDA|S\/A/gi, '').trim();
@@ -111,7 +115,7 @@ export class Home implements OnInit {
         }
       });
 
-      this.lojasRecentes = Array.from(lojasUnicas.values()).slice(0, 10);
+      this.lojasRecentes = Array.from(lojasUnicas.values()).slice(0, this.limiteLojas);
       this.cdr.detectChanges();
     } catch (error) {
       console.error(error);
