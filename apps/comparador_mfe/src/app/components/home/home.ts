@@ -40,7 +40,7 @@ export class Home implements OnInit {
 
     notas.forEach(nota => {
       if (nota.itens && Array.isArray(nota.itens)) {
-        const nomeLoja = (nota.estabelecimento?.nome || 'Desconhecido')
+        const nomeLoja = (nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome || 'Desconhecido')
           .replace(removerPalavras, '').trim().toUpperCase();
 
         nota.itens.forEach((item: any) => {

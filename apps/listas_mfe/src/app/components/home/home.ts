@@ -53,7 +53,7 @@ export class Home implements OnInit {
       const lojasUnicas = new Map();
 
       notas.forEach((nota: any) => {
-        const nomeLoja = nota.estabelecimento?.nome;
+        const nomeLoja = nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome;
         if (nomeLoja && !lojasUnicas.has(nomeLoja)) {
           const nomeLimpo = nomeLoja.replace(/SUPERMERCADOS?|MERCADOS?|ATACADISTA|LTDA|S\/A/gi, '').trim();
           lojasUnicas.set(nomeLoja, {

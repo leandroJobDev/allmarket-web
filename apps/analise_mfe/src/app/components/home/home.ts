@@ -48,7 +48,7 @@ export class Home implements AfterViewInit {
           }
         }
 
-        let nomeLoja = nota.estabelecimento?.nome || "OUTROS";
+        let nomeLoja = nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome || "OUTROS";
         nomeLoja = nomeLoja.replace(removerPalavras, '').trim().split(' ')[0].toUpperCase();
         if (!nomeLoja) nomeLoja = "OUTROS";
         

@@ -129,7 +129,7 @@ export class Home implements OnInit, AfterViewChecked {
 
   aplicarFiltrosEDados() {
     this.notasFiltradas = this.todasAsNotas.filter(nota => {
-      const nome = nota.estabelecimento?.nome?.toLowerCase() || '';
+      const nome = (nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome)?.toLowerCase() || '';
       return nome.includes(this.termoBusca.toLowerCase());
     });
     this.atualizarLista();
