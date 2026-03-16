@@ -265,12 +265,16 @@ export class Home implements OnInit {
 
   async deletarListaSalva(lista: any, event: Event) {
     event.stopPropagation();
-    const email = localStorage.getItem(this.userEmailKey);
+    
+    const confirmar = window.confirm(`Deseja realmente excluir a lista "${lista.nome}"?`);
+    if (!confirmar) return;
 
+    const email = localStorage.getItem(this.userEmailKey);
+    
     if (lista.id && email) {
       await this.apiService.deletarLista(lista.id);
     }
-
+    
     this.listasSalvas = this.listasSalvas.filter(l => l.id !== lista.id && l.nome !== lista.nome);
     if (!email) {
       localStorage.setItem(this.storageListasKey, JSON.stringify(this.listasSalvas));
@@ -298,6 +302,9 @@ export class Home implements OnInit {
   }
 
   async removerCompartilhamento(email: string) {
+    const confirmar = window.confirm(`Deseja realmente desvincular o e-mail ${email}? Você deixará de compartilhar dados com esta conta.`);
+    if (!confirmar) return;
+
     const userEmail = localStorage.getItem(this.userEmailKey);
     if (!userEmail) return;
 

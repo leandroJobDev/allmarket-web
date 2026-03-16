@@ -4,6 +4,14 @@
     <span class="item-counter">{{ itens.length }} itens</span>
   </header>
 
+  <div class="linked-accounts-mini" *ngIf="emailsVinculados.length > 0">
+    <div *ngFor="let email of emailsVinculados" class="account-chip">
+      <mat-icon class="user-icon">face</mat-icon>
+      <span class="email-text" [title]="email">{{ email.split('@')[0] }}</span>
+      <mat-icon class="btn-delete-link" (click)="removerCompartilhamento(email)" title="Remover vínculo">delete_outline</mat-icon>
+    </div>
+  </div>
+
   <div class="add-item-card">
     <input type="text" #itemInput (keyup.enter)="adicionarItem(itemInput)" placeholder="O que você precisa?"
       class="modern-input">
