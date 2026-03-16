@@ -136,6 +136,47 @@ export class NotasApiService {
     }
   }
 
+  async vincularEmail(emailDono: string, emailVinculado: string): Promise<void> {
+    this.loadingService.show();
+    try {
+      await firstValueFrom(
+        this.http.post(`${this.apiUrl}/vinculos`, { email_dono: emailDono, email_vinculado: emailVinculado })
+      );
+    } catch (error) {
+      console.error('Erro ao vincular e-mail:', error);
+      throw error;
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
+  async getVinculos(email: string): Promise<string[]> {
+    this.loadingService.show();
+    try {
+      return await firstValueFrom(
+        this.http.get<string[]>(`${this.apiUrl}/vinculos?email=${email}`)
+      );
+    } catch (error) {
+      console.error('Erro ao buscar vínculos:', error);
+      return [email];
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
+  async desvincularEmail(emailA: string, emailB: string): Promise<void> {
+    this.loadingService.show();
+    try {
+      await firstValueFrom(
+        this.http.delete(`${this.apiUrl}/vinculos?email_a=${emailA}&email_b=${emailB}`)
+      );
+    } catch (error) {
+      console.error('Erro ao desvincular e-mail:', error);
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
   limparEstado() {
     this.temNotasSubject.next(false);
   }

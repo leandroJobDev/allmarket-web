@@ -1,6 +1,12 @@
 <div class="lista-container">
   <header class="list-header">
-    <h1>Minha Lista</h1>
+    <div class="header-main">
+      <h1>Minha Lista</h1>
+      <button class="btn-share-header" (click)="exibirPainelCompartilhar = !exibirPainelCompartilhar" 
+              [class.active]="exibirPainelCompartilhar" title="Vincular contas">
+        <mat-icon>group_add</mat-icon>
+      </button>
+    </div>
     <span class="item-counter">{{ itens.length }} itens</span>
   </header>
 
@@ -66,6 +72,11 @@
   </div>
 
   <div class="items-grid">
+    <div class="list-display-name" *ngIf="itens.length > 0">
+       <mat-icon>checklist</mat-icon>
+       <span>{{ (listaAtivaObjeto?.nome || 'LISTA ATUAL') }}</span>
+    </div>
+
     <div class="lista-actions" *ngIf="itens.length > 0">
       <div class="selecionar-tudo-row">
         <mat-checkbox
@@ -79,10 +90,37 @@
           <mat-icon>delete_sweep</mat-icon>
         </button>
       </div>
-      <button class="btn-save-list" (click)="exibirPainelSalvar = !exibirPainelSalvar">
-        <mat-icon>save</mat-icon>
+
+      <button class="btn-save-list" (click)="exibirPainelSalvar = !exibirPainelSalvar" [class.active]="exibirPainelSalvar">
+        <mat-icon>save_alt</mat-icon>
         Salvar Lista
       </button>
+    </div>
+
+    <!-- Painel de Gerenciamento de Vínculos (Global) -->
+    <div class="share-panel animate-in" *ngIf="exibirPainelCompartilhar">
+      <div class="panel-info-header">
+        <mat-icon>group_add</mat-icon>
+        <div>
+          <strong>Contas Vinculadas</strong>
+          <p>E-mails adicionados aqui compartilharão históricos e listas com você.</p>
+        </div>
+      </div>
+
+      <div class="input-share-group">
+        <input type="email" [(ngModel)]="emailParaCompartilhar" placeholder="Email do parceiro(a)..." class="share-input">
+        <button class="btn-confirm-share" [disabled]="!emailParaCompartilhar" (click)="compartilharLista()">
+          VINCULAR
+        </button>
+      </div>
+      
+      <div class="shared-emails-list" *ngIf="emailsVinculados.length > 0">
+        <p class="shared-title">Vínculos Ativos:</p>
+        <div *ngFor="let email of emailsVinculados" class="shared-email-chip">
+          <span>{{ email }}</span>
+          <mat-icon (click)="removerCompartilhamento(email)">close</mat-icon>
+        </div>
+      </div>
     </div>
 
     <div class="save-panel animate-in" *ngIf="exibirPainelSalvar">

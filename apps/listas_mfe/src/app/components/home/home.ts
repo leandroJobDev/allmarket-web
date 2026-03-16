@@ -30,6 +30,11 @@ export class Home implements OnInit {
   nomeNovaLista: string = '';
   exibirPainelSalvar: boolean = false;
   
+  listaAtivaObjeto: any = null;
+  emailParaCompartilhar: string = '';
+  exibirPainelCompartilhar: boolean = false;
+  emailsVinculados: string[] = [];
+  
   storageKey = 'allmarket_lista_compras';
   storageListasKey = 'allmarket_listas_salvas_db';
   userEmailKey = 'allmarket_user_email';
@@ -45,9 +50,16 @@ export class Home implements OnInit {
       if (listasDB) this.listasSalvas = JSON.parse(listasDB);
     } else {
       await this.carregarDadosFirestore(email);
+      await this.carregarVinculos(email);
     }
 
     await this.carregarLojasRecentes();
+  }
+
+  async carregarVinculos(email: string) {
+    const vinculos = await this.apiService.getVinculos(email);
+    // Remove o próprio e-mail da lista de exibição para mostrar apenas os parceiros
+    this.emailsVinculados = vinculos.filter(e => e.toLowerCase() !== email.toLowerCase());
   }
 
   async carregarDadosFirestore(email: string) {
@@ -57,6 +69,7 @@ export class Home implements OnInit {
     // Procura a lista ativa
     const listaAtiva = listas.find(l => l.ativa);
     if (listaAtiva) {
+      this.listaAtivaObjeto = listaAtiva;
       this.itens = listaAtiva.itens || [];
     } else {
       // Se não tem no firestore mas tem no localStorage, migra
@@ -201,15 +214,17 @@ export class Home implements OnInit {
     }
 
     const lista = {
+      ...this.listaAtivaObjeto,
       usuario_email: email,
       nome: 'LISTA ATIVA',
       itens: this.itens,
       ativa: true,
-      data_criacao: new Date().toISOString()
+      data_criacao: this.listaAtivaObjeto?.data_criacao || new Date().toISOString()
     };
 
     try {
-      await this.apiService.salvarLista(lista);
+      const salva = await this.apiService.salvarLista(lista);
+      this.listaAtivaObjeto = salva;
       // Remove do storage local para garantir que a fonte da verdade é o firestore
       localStorage.removeItem(this.storageKey);
     } catch (error) {
@@ -259,6 +274,40 @@ export class Home implements OnInit {
     this.listasSalvas = this.listasSalvas.filter(l => l.id !== lista.id && l.nome !== lista.nome);
     if (!email) {
       localStorage.setItem(this.storageListasKey, JSON.stringify(this.listasSalvas));
+    }
+  }
+
+  async compartilharLista() {
+    const emailDesejado = this.emailParaCompartilhar.trim().toLowerCase();
+    if (!emailDesejado || !emailDesejado.includes('@')) return;
+
+    const userEmail = localStorage.getItem(this.userEmailKey);
+    if (!userEmail) return;
+
+    try {
+      await this.apiService.vincularEmail(userEmail, emailDesejado);
+      await this.carregarVinculos(userEmail); // Atualiza lista global
+      await this.carregarDadosFirestore(userEmail); // Atualiza dados agora que estão vinculados
+
+      this.emailParaCompartilhar = '';
+      this.exibirPainelCompartilhar = false;
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Erro ao vincular', error);
+    }
+  }
+
+  async removerCompartilhamento(email: string) {
+    const userEmail = localStorage.getItem(this.userEmailKey);
+    if (!userEmail) return;
+
+    try {
+      await this.apiService.desvincularEmail(userEmail, email);
+      await this.carregarVinculos(userEmail);
+      await this.carregarDadosFirestore(userEmail);
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Erro ao desvincular', error);
     }
   }
 }
