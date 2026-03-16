@@ -76,9 +76,23 @@
       &.chip-saved {
         border-color: #22c55e;
         color: #16a34a;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
         &.active {
           background: #22c55e;
           color: white;
+          .icon-delete-chip { color: white; }
+        }
+
+        .icon-delete-chip {
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
+          color: #22c55e;
+          opacity: 0.6;
+          &:hover { opacity: 1; color: #ef4444; }
         }
       }
     }

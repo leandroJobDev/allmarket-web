@@ -35,13 +35,48 @@ export class Home implements OnInit {
   userEmailKey = 'allmarket_user_email';
 
   async ngOnInit() {
-    const salvo = localStorage.getItem(this.storageKey);
-    if (salvo) this.itens = JSON.parse(salvo);
-    
-    const listasDB = localStorage.getItem(this.storageListasKey);
-    if (listasDB) this.listasSalvas = JSON.parse(listasDB);
+    const email = localStorage.getItem(this.userEmailKey);
+    if (!email) {
+      // Fallback para localStorage se não houver email logado
+      const salvo = localStorage.getItem(this.storageKey);
+      if (salvo) this.itens = JSON.parse(salvo);
+      
+      const listasDB = localStorage.getItem(this.storageListasKey);
+      if (listasDB) this.listasSalvas = JSON.parse(listasDB);
+    } else {
+      await this.carregarDadosFirestore(email);
+    }
 
     await this.carregarLojasRecentes();
+  }
+
+  async carregarDadosFirestore(email: string) {
+    const res = await this.apiService.getListas(email);
+    const listas = Array.isArray(res) ? res : [];
+    
+    // Procura a lista ativa
+    const listaAtiva = listas.find(l => l.ativa);
+    if (listaAtiva) {
+      this.itens = listaAtiva.itens || [];
+    } else {
+      // Se não tem no firestore mas tem no localStorage, migra
+      const salvo = localStorage.getItem(this.storageKey);
+      if (salvo) {
+        this.itens = JSON.parse(salvo);
+        await this.persistirListaAtiva();
+      }
+    }
+
+    // Listas salvas (modelos)
+    this.listasSalvas = listas.filter(l => !l.ativa);
+    if (this.listasSalvas.length === 0) {
+      const listasDB = localStorage.getItem(this.storageListasKey);
+      if (listasDB) {
+        this.listasSalvas = JSON.parse(listasDB);
+        // Sincroniza em background
+        this.apiService.sincronizarListas(email, this.listasSalvas);
+      }
+    }
   }
 
   async carregarLojasRecentes() {
@@ -139,39 +174,91 @@ export class Home implements OnInit {
     return [...naoComprados, ...comprados];
   }
 
-  toggleItem(item: ItemLista) {
+  async toggleItem(item: ItemLista) {
     item.comprado = !item.comprado;
-    this.salvarNoStorage();
+    await this.persistirListaAtiva();
   }
 
-  removerPorNome(nome: string) {
+  async removerPorNome(nome: string) {
     this.itens = this.itens.filter(i => i.nome !== nome);
-    this.salvarNoStorage();
+    await this.persistirListaAtiva();
   }
 
-  removerTudo() {
+  async removerTudo() {
     this.itens = [];
-    this.salvarNoStorage();
+    await this.persistirListaAtiva();
   }
 
-  salvarNoStorage() {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.itens));
+  async salvarNoStorage() {
+    await this.persistirListaAtiva();
   }
 
-  salvarListaCompleta() {
-    if (!this.nomeNovaLista.trim()) return;
+  async persistirListaAtiva() {
+    const email = localStorage.getItem(this.userEmailKey);
+    if (!email) {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.itens));
+      return;
+    }
 
-    const novaLista = {
-      nome: this.nomeNovaLista.toUpperCase(),
-      itens: [...this.itens],
-      isListaSalva: true
+    const lista = {
+      usuario_email: email,
+      nome: 'LISTA ATIVA',
+      itens: this.itens,
+      ativa: true,
+      data_criacao: new Date().toISOString()
     };
 
-    this.listasSalvas.unshift(novaLista);
-    localStorage.setItem(this.storageListasKey, JSON.stringify(this.listasSalvas));
+    try {
+      await this.apiService.salvarLista(lista);
+      // Remove do storage local para garantir que a fonte da verdade é o firestore
+      localStorage.removeItem(this.storageKey);
+    } catch (error) {
+      console.error('Erro ao persistir no Firestore, salvando localmente como backup', error);
+      localStorage.setItem(this.storageKey, JSON.stringify(this.itens));
+    }
+  }
+
+  async salvarListaCompleta() {
+    if (!this.nomeNovaLista.trim()) return;
+
+    const email = localStorage.getItem(this.userEmailKey);
+    const novaLista = {
+      usuario_email: email,
+      nome: this.nomeNovaLista.toUpperCase(),
+      itens: [...this.itens],
+      ativa: false,
+      data_criacao: new Date().toISOString()
+    };
+
+    if (email) {
+      try {
+        const salva = await this.apiService.salvarLista(novaLista);
+        this.listasSalvas.unshift(salva);
+        localStorage.removeItem(this.storageListasKey);
+      } catch (error) {
+        this.listasSalvas.unshift(novaLista);
+      }
+    } else {
+      this.listasSalvas.unshift(novaLista);
+      localStorage.setItem(this.storageListasKey, JSON.stringify(this.listasSalvas));
+    }
 
     this.nomeNovaLista = '';
     this.exibirPainelSalvar = false;
     this.cdr.detectChanges();
+  }
+
+  async deletarListaSalva(lista: any, event: Event) {
+    event.stopPropagation();
+    const email = localStorage.getItem(this.userEmailKey);
+    
+    if (lista.id && email) {
+      await this.apiService.deletarLista(lista.id);
+    }
+    
+    this.listasSalvas = this.listasSalvas.filter(l => l.id !== lista.id && l.nome !== lista.nome);
+    if (!email) {
+      localStorage.setItem(this.storageListasKey, JSON.stringify(this.listasSalvas));
+    }
   }
 }

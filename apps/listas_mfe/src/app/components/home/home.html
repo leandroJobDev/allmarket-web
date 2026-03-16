@@ -21,6 +21,7 @@
               [class.active]="lojaSelecionada?.nome === lista.nome"
               class="chip-loja chip-saved">
         {{ lista.nome }}
+        <mat-icon class="icon-delete-chip" (click)="deletarListaSalva(lista, $event)">close</mat-icon>
       </button>
 
       <button *ngFor="let loja of lojasRecentes" 

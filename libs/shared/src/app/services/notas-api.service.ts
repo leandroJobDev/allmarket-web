@@ -79,6 +79,63 @@ export class NotasApiService {
     return existe;
   }
 
+  async getListas(email: string): Promise<any[]> {
+    this.loadingService.show();
+    try {
+      const res = await firstValueFrom(
+        this.http.get<any[]>(`${this.apiUrl}/listas?email=${email}`)
+      );
+      return Array.isArray(res) ? res : [];
+    } catch (error) {
+      console.error('Erro ao buscar listas:', error);
+      return [];
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
+  async salvarLista(lista: any): Promise<any> {
+    this.loadingService.show();
+    try {
+      return await firstValueFrom(
+        this.http.post<any>(`${this.apiUrl}/listas`, lista)
+      );
+    } catch (error) {
+      console.error('Erro ao salvar lista:', error);
+      throw error;
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
+  async deletarLista(id: string): Promise<boolean> {
+    this.loadingService.show();
+    try {
+      await firstValueFrom(
+        this.http.delete(`${this.apiUrl}/listas/${id}`)
+      );
+      return true;
+    } catch (error) {
+      console.error('Erro ao deletar lista:', error);
+      return false;
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
+  async sincronizarListas(email: string, listas: any[]): Promise<void> {
+    this.loadingService.show();
+    try {
+      await firstValueFrom(
+        this.http.post(`${this.apiUrl}/listas/sincronizar`, { email, listas })
+      );
+    } catch (error) {
+      console.error('Erro ao sincronizar listas:', error);
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
   limparEstado() {
     this.temNotasSubject.next(false);
   }
