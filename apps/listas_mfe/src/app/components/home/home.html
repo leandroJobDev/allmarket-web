@@ -42,8 +42,9 @@
       </button>
 
       <button *ngFor="let loja of lojasRecentes" (click)="abrirEscolhaItens(loja)"
-        [class.active]="lojaSelecionada?.nome === loja.nome" class="chip-loja">
-        {{ loja.nome }}
+        [class.active]="lojaSelecionada?.nome === loja.nome && lojaSelecionada?.data === loja.data" class="chip-loja">
+        <div class="loja-nome">{{ loja.nome }}</div>
+        <div class="loja-data">{{ loja.data }}</div>
       </button>
     </div>
 

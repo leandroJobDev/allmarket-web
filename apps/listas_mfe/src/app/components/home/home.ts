@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { NotasApiService } from '@allmarket-web/shared';
+import { ConfirmacaoDialog } from '../confirmacao-dialog/confirmacao-dialog';
+import { firstValueFrom } from 'rxjs';
 
 interface ItemLista {
   nome: string;
@@ -13,13 +16,14 @@ interface ItemLista {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatCheckboxModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatCheckboxModule, MatDialogModule],
   templateUrl: './home.html',
   styleUrls: ['./home.scss']
 })
 export class Home implements OnInit {
   private apiService = inject(NotasApiService);
   private cdr = inject(ChangeDetectorRef);
+  private dialog = inject(MatDialog);
 
   itens: ItemLista[] = [];
   limiteLojas: number = 10;
@@ -102,20 +106,27 @@ export class Home implements OnInit {
       const notas = await this.apiService.getHistorico(email);
       // O backend traz tudo, nós limitamos aqui para manter a performance de visualização
       const notasLimitadas = notas.slice(0, this.limiteLojas * 2); // Pega um pouco mais para garantir lojas únicas
-      const lojasUnicas = new Map();
+      const lojasProcessadas: any[] = [];
 
       notasLimitadas.forEach((nota: any) => {
-        const nomeLoja = nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome;
-        if (nomeLoja && !lojasUnicas.has(nomeLoja)) {
-          const nomeLimpo = nomeLoja.replace(/SUPERMERCADOS?|MERCADOS?|ATACADISTA|LTDA|S\/A/gi, '').trim();
-          lojasUnicas.set(nomeLoja, {
-            nome: nomeLimpo,
-            itens: nota.itens || []
-          });
+        const est = nota.estabelecimento;
+        if (!est) return;
+
+        let nomeExibicao = '';
+        if (est.nome_fantasia && est.nome_fantasia.trim() !== '') {
+          nomeExibicao = est.nome_fantasia.trim().toUpperCase();
+        } else {
+          nomeExibicao = est.nome.replace(/SUPERMERCADOS?|MERCADOS?|ATACADISTA|LTDA|S\/A|COMERCIO|IMPORTACAO|EXPORTACAO/gi, '').trim().toUpperCase();
         }
+
+        lojasProcessadas.push({
+          nome: nomeExibicao,
+          data: nota.data_emissao,
+          itens: nota.itens || []
+        });
       });
 
-      this.lojasRecentes = Array.from(lojasUnicas.values()).slice(0, this.limiteLojas);
+      this.lojasRecentes = lojasProcessadas.slice(0, this.limiteLojas);
       this.cdr.detectChanges();
     } catch (error) {
       console.error(error);
@@ -270,7 +281,14 @@ export class Home implements OnInit {
   async deletarListaSalva(lista: any, event: Event) {
     event.stopPropagation();
     
-    const confirmar = window.confirm(`Deseja realmente excluir a lista "${lista.nome}"?`);
+    const dialogRef = this.dialog.open(ConfirmacaoDialog, {
+      data: {
+        titulo: 'Excluir Lista',
+        mensagem: `Deseja realmente excluir a lista "${lista.nome}"?`
+      }
+    });
+
+    const confirmar = await firstValueFrom(dialogRef.afterClosed());
     if (!confirmar) return;
 
     const email = localStorage.getItem(this.userEmailKey);
@@ -306,7 +324,15 @@ export class Home implements OnInit {
   }
 
   async removerCompartilhamento(email: string) {
-    const confirmar = window.confirm(`Deseja realmente desvincular o e-mail ${email}? Você deixará de compartilhar dados com esta conta.`);
+    const dialogRef = this.dialog.open(ConfirmacaoDialog, {
+      data: {
+        titulo: 'Remover Vínculo',
+        mensagem: `Deseja realmente desvincular o e-mail ${email}? Você deixará de compartilhar dados com esta conta.`,
+        textoConfirmar: 'DESVINCULAR'
+      }
+    });
+
+    const confirmar = await firstValueFrom(dialogRef.afterClosed());
     if (!confirmar) return;
 
     const userEmail = localStorage.getItem(this.userEmailKey);

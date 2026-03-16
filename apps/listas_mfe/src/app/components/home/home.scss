@@ -106,18 +106,26 @@
 
     .chip-loja {
       white-space: nowrap;
-      padding: 8px 16px;
-      border-radius: 20px;
+      padding: 6px 16px;
+      border-radius: 12px;
       background: white;
       border: 1px solid #e2e8f0;
-      font-size: 13px;
-      font-weight: 600;
       color: #475569;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.2;
+      transition: all 0.2s;
+      
+      .loja-nome { font-size: 13px; font-weight: 700; }
+      .loja-data { font-size: 10px; color: #94a3b8; font-weight: 500; font-family: monospace; margin-top: 2px; }
       
       &.active {
         background: #2563eb;
         color: white;
         border-color: #2563eb;
+        .loja-data { color: rgba(255,255,255,0.8); }
       }
 
       &.chip-saved {
