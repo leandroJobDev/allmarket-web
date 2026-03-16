@@ -43,14 +43,14 @@ export class RemoteEntry implements OnInit {
   async verificarStatus() {
     const dadosUsuario = localStorage.getItem('allmarket_user');
     const email = localStorage.getItem('allmarket_user_email');
-    const url = this.router.url;
+    const currentPath = window.location.pathname;
 
     if (dadosUsuario && email) {
       this.userData = JSON.parse(dadosUsuario);
-      this.exibirNavbar = !url.includes('/login');
-      this.exibirProcessarNota = !url.includes('/login');
+      this.exibirNavbar = !currentPath.includes('/login');
+      this.exibirProcessarNota = !currentPath.includes('/login');
 
-      if (url === '/' || url === '/login') {
+      if (currentPath === '/' || currentPath === '/login') {
         const temNotas = await this.apiService.validarEAtualizarNotas(email);
         if (temNotas) {
           this.router.navigate(['/notas']);
@@ -61,7 +61,7 @@ export class RemoteEntry implements OnInit {
     } else {
       this.exibirNavbar = false;
       this.exibirProcessarNota = false;
-      if (!url.includes('/login')) {
+      if (!currentPath.includes('/login')) {
         this.router.navigate(['/login']);
       }
     }

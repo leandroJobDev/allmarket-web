@@ -5,7 +5,7 @@
     <div class="header-main">
       <div class="title-group">
         <mat-card-title class="loja-nome">
-          {{ nota.estabelecimento?.nome }}
+          {{ nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome }}
         </mat-card-title>
         <div class="sub-info">
           <span class="endereco">{{ nota.estabelecimento?.endereco }}</span>       

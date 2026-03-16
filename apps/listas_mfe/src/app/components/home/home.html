@@ -40,6 +40,15 @@
       </div>
       
       <div class="panel-body">
+        <div class="select-all-panel-row" *ngIf="itensParaEscolher.length > 0">
+          <mat-checkbox 
+             color="primary"
+             [checked]="todosItensParaEscolherSelecionados"
+             [indeterminate]="algunsItensParaEscolherSelecionados"
+             (change)="toggleSelecionarTudoParaEscolher()">
+             Selecionar tudo
+           </mat-checkbox>
+        </div>
         <div *ngFor="let item of itensParaEscolher" class="selectable-item">
           <mat-checkbox [(ngModel)]="item.selecionado" color="primary">
             {{ item.nome }}
@@ -57,6 +66,18 @@
 
   <div class="items-grid">
     <div class="lista-actions" *ngIf="itens.length > 0">
+      <div class="selecionar-tudo-row">
+        <mat-checkbox
+          color="primary"
+          [checked]="todosComprados"
+          [indeterminate]="algunsComprados"
+          (change)="toggleSelecionarTudo()">
+          Selecionar tudo
+        </mat-checkbox>
+        <button class="btn-remove-all" *ngIf="todosComprados" (click)="removerTudo()" title="Remover tudo">
+          <mat-icon>delete_sweep</mat-icon>
+        </button>
+      </div>
       <button class="btn-save-list" (click)="exibirPainelSalvar = !exibirPainelSalvar">
         <mat-icon>save</mat-icon>
         Salvar Lista
@@ -72,12 +93,12 @@
       </div>
     </div>
 
-    <div *ngFor="let item of itens; let i = index" class="item-card-row" [class.is-comprado]="item.comprado">
+    <div *ngFor="let item of itensSorted" class="item-card-row" [class.is-comprado]="item.comprado">
       <div class="item-info">
         <mat-checkbox [(ngModel)]="item.comprado" (change)="salvarNoStorage()" color="primary"></mat-checkbox>
         <span class="item-nome" [class.comprado]="item.comprado">{{ item.nome }}</span>
       </div>
-      <button class="btn-delete" (click)="removerItem(i)">
+      <button class="btn-delete" (click)="removerPorNome(item.nome)">
         <mat-icon>delete_outline</mat-icon>
       </button>
     </div>

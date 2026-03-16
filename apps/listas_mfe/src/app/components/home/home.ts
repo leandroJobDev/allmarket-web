@@ -106,8 +106,51 @@ export class Home implements OnInit {
     }
   }
 
-  removerItem(index: number) {
-    this.itens.splice(index, 1);
+  get todosComprados(): boolean {
+    return this.itens.length > 0 && this.itens.every(i => i.comprado);
+  }
+
+  get algunsComprados(): boolean {
+    return this.itens.some(i => i.comprado) && !this.todosComprados;
+  }
+
+  toggleSelecionarTudo() {
+    const novoEstado = !this.todosComprados;
+    this.itens.forEach(i => i.comprado = novoEstado);
+    this.salvarNoStorage();
+  }
+
+  get todosItensParaEscolherSelecionados(): boolean {
+    return this.itensParaEscolher.length > 0 && this.itensParaEscolher.every(i => i.selecionado);
+  }
+
+  get algunsItensParaEscolherSelecionados(): boolean {
+    return this.itensParaEscolher.some(i => i.selecionado) && !this.todosItensParaEscolherSelecionados;
+  }
+
+  toggleSelecionarTudoParaEscolher() {
+    const novoEstado = !this.todosItensParaEscolherSelecionados;
+    this.itensParaEscolher.forEach(i => i.selecionado = novoEstado);
+  }
+
+  get itensSorted(): ItemLista[] {
+    const naoComprados = this.itens.filter(i => !i.comprado).sort((a, b) => a.nome.localeCompare(b.nome));
+    const comprados = this.itens.filter(i => i.comprado).sort((a, b) => a.nome.localeCompare(b.nome));
+    return [...naoComprados, ...comprados];
+  }
+
+  toggleItem(item: ItemLista) {
+    item.comprado = !item.comprado;
+    this.salvarNoStorage();
+  }
+
+  removerPorNome(nome: string) {
+    this.itens = this.itens.filter(i => i.nome !== nome);
+    this.salvarNoStorage();
+  }
+
+  removerTudo() {
+    this.itens = [];
     this.salvarNoStorage();
   }
 

@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { NotasApiService } from '@allmarket-web/shared';
+import { NotasApiService, ProcessarNota } from '@allmarket-web/shared';
 import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
 
 @Component({
@@ -19,7 +19,8 @@ import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    NotaDetalhes
+    NotaDetalhes,
+    ProcessarNota
   ],
   providers: [CurrencyPipe, DatePipe],
   templateUrl: './home.html',

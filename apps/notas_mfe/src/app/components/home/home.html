@@ -21,7 +21,7 @@
 
       <div class="card-content">
         <div class="info-principal">
-          <span class="estabelecimento-nome">{{ limparNome(nota.estabelecimento?.nome) }}</span>
+          <span class="estabelecimento-nome">{{ nota.estabelecimento?.nome_fantasia || limparNome(nota.estabelecimento?.nome) }}</span>
           <span class="data-compra">{{ formatarData(nota.data_emissao) }}</span>
         </div>
 
