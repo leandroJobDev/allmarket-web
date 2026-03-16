@@ -1,18 +1,12 @@
 <div class="lista-container">
   <header class="list-header">
-    <div class="header-main">
-      <h1>Minha Lista</h1>
-      <button class="btn-share-header" (click)="exibirPainelCompartilhar = !exibirPainelCompartilhar" 
-              [class.active]="exibirPainelCompartilhar" title="Vincular contas">
-        <mat-icon>group_add</mat-icon>
-      </button>
-    </div>
+    <h1>Minha Lista</h1>
     <span class="item-counter">{{ itens.length }} itens</span>
   </header>
 
   <div class="add-item-card">
-    <input type="text" #itemInput (keyup.enter)="adicionarItem(itemInput)" 
-           placeholder="O que você precisa?" class="modern-input">
+    <input type="text" #itemInput (keyup.enter)="adicionarItem(itemInput)" placeholder="O que você precisa?"
+      class="modern-input">
     <button class="btn-add-main" (click)="adicionarItem(itemInput)">
       <mat-icon>add</mat-icon>
     </button>
@@ -21,19 +15,15 @@
   <div class="suggestions-section" *ngIf="lojasRecentes.length > 0 || listasSalvas.length > 0">
     <p class="section-title">Sugestões por loja ou listas salvas</p>
     <div class="lojas-scroll">
-      
-      <button *ngFor="let lista of listasSalvas" 
-              (click)="abrirEscolhaItens(lista, true)" 
-              [class.active]="lojaSelecionada?.nome === lista.nome"
-              class="chip-loja chip-saved">
+
+      <button *ngFor="let lista of listasSalvas" (click)="abrirEscolhaItens(lista, true)"
+        [class.active]="lojaSelecionada?.nome === lista.nome" class="chip-loja chip-saved">
         {{ lista.nome }}
         <mat-icon class="icon-delete-chip" (click)="deletarListaSalva(lista, $event)">close</mat-icon>
       </button>
 
-      <button *ngFor="let loja of lojasRecentes" 
-              (click)="abrirEscolhaItens(loja)" 
-              [class.active]="lojaSelecionada?.nome === loja.nome"
-              class="chip-loja">
+      <button *ngFor="let loja of lojasRecentes" (click)="abrirEscolhaItens(loja)"
+        [class.active]="lojaSelecionada?.nome === loja.nome" class="chip-loja">
         {{ loja.nome }}
       </button>
     </div>
@@ -45,16 +35,13 @@
           <mat-icon>close</mat-icon>
         </button>
       </div>
-      
+
       <div class="panel-body">
         <div class="select-all-panel-row" *ngIf="itensParaEscolher.length > 0">
-          <mat-checkbox 
-             color="primary"
-             [checked]="todosItensParaEscolherSelecionados"
-             [indeterminate]="algunsItensParaEscolherSelecionados"
-             (change)="toggleSelecionarTudoParaEscolher()">
-             Selecionar tudo
-           </mat-checkbox>
+          <mat-checkbox color="primary" [checked]="todosItensParaEscolherSelecionados"
+            [indeterminate]="algunsItensParaEscolherSelecionados" (change)="toggleSelecionarTudoParaEscolher()">
+            Selecionar tudo
+          </mat-checkbox>
         </div>
         <div *ngFor="let item of itensParaEscolher" class="selectable-item">
           <mat-checkbox [(ngModel)]="item.selecionado" color="primary">
@@ -72,17 +59,21 @@
   </div>
 
   <div class="items-grid">
-    <div class="list-display-name" *ngIf="itens.length > 0">
-       <mat-icon>checklist</mat-icon>
-       <span>{{ (listaAtivaObjeto?.nome || 'LISTA ATUAL') }}</span>
+    <div class="list-control-header" *ngIf="itens.length > 0">
+      <div class="list-identity">
+        <mat-icon>checklist</mat-icon>
+        <span>{{ (listaAtivaObjeto?.nome || 'LISTA ATUAL') }}</span>
+      </div>
+      <button class="btn-group-manage" (click)="exibirPainelCompartilhar = !exibirPainelCompartilhar"
+        [class.active]="exibirPainelCompartilhar">
+        <mat-icon>group_add</mat-icon>
+        <span>Vincular Familiar</span>
+      </button>
     </div>
 
     <div class="lista-actions" *ngIf="itens.length > 0">
       <div class="selecionar-tudo-row">
-        <mat-checkbox
-          color="primary"
-          [checked]="todosComprados"
-          [indeterminate]="algunsComprados"
+        <mat-checkbox color="primary" [checked]="todosComprados" [indeterminate]="algunsComprados"
           (change)="toggleSelecionarTudo()">
           Selecionar tudo
         </mat-checkbox>
@@ -91,7 +82,8 @@
         </button>
       </div>
 
-      <button class="btn-save-list" (click)="exibirPainelSalvar = !exibirPainelSalvar" [class.active]="exibirPainelSalvar">
+      <button class="btn-save-list" (click)="exibirPainelSalvar = !exibirPainelSalvar"
+        [class.active]="exibirPainelSalvar">
         <mat-icon>save_alt</mat-icon>
         Salvar Lista
       </button>
@@ -108,12 +100,13 @@
       </div>
 
       <div class="input-share-group">
-        <input type="email" [(ngModel)]="emailParaCompartilhar" placeholder="Email do parceiro(a)..." class="share-input">
+        <input type="email" [(ngModel)]="emailParaCompartilhar" placeholder="Email do parceiro(a)..."
+          class="share-input">
         <button class="btn-confirm-share" [disabled]="!emailParaCompartilhar" (click)="compartilharLista()">
           VINCULAR
         </button>
       </div>
-      
+
       <div class="shared-emails-list" *ngIf="emailsVinculados.length > 0">
         <p class="shared-title">Vínculos Ativos:</p>
         <div *ngFor="let email of emailsVinculados" class="shared-email-chip">

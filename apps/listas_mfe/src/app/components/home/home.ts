@@ -20,21 +20,21 @@ interface ItemLista {
 export class Home implements OnInit {
   private apiService = inject(NotasApiService);
   private cdr = inject(ChangeDetectorRef);
-  
+
   itens: ItemLista[] = [];
   lojasRecentes: any[] = [];
   listasSalvas: any[] = [];
   lojaSelecionada: any = null;
   itensParaEscolher: any[] = [];
-  
+
   nomeNovaLista: string = '';
   exibirPainelSalvar: boolean = false;
-  
+
   listaAtivaObjeto: any = null;
   emailParaCompartilhar: string = '';
   exibirPainelCompartilhar: boolean = false;
   emailsVinculados: string[] = [];
-  
+
   storageKey = 'allmarket_lista_compras';
   storageListasKey = 'allmarket_listas_salvas_db';
   userEmailKey = 'allmarket_user_email';
@@ -45,7 +45,7 @@ export class Home implements OnInit {
       // Fallback para localStorage se não houver email logado
       const salvo = localStorage.getItem(this.storageKey);
       if (salvo) this.itens = JSON.parse(salvo);
-      
+
       const listasDB = localStorage.getItem(this.storageListasKey);
       if (listasDB) this.listasSalvas = JSON.parse(listasDB);
     } else {
@@ -65,7 +65,7 @@ export class Home implements OnInit {
   async carregarDadosFirestore(email: string) {
     const res = await this.apiService.getListas(email);
     const listas = Array.isArray(res) ? res : [];
-    
+
     // Procura a lista ativa
     const listaAtiva = listas.find(l => l.ativa);
     if (listaAtiva) {
@@ -182,9 +182,9 @@ export class Home implements OnInit {
   }
 
   get itensSorted(): ItemLista[] {
-    const naoComprados = this.itens.filter(i => !i.comprado).sort((a, b) => a.nome.localeCompare(b.nome));
-    const comprados = this.itens.filter(i => i.comprado).sort((a, b) => a.nome.localeCompare(b.nome));
-    return [...naoComprados, ...comprados];
+    // Ordena apenas pelo nome. Assim o item mantém sua posição 
+    // alfabética fixa mesmo se for marcado como comprado.
+    return [...this.itens].sort((a, b) => a.nome.localeCompare(b.nome));
   }
 
   async toggleItem(item: ItemLista) {
@@ -266,11 +266,11 @@ export class Home implements OnInit {
   async deletarListaSalva(lista: any, event: Event) {
     event.stopPropagation();
     const email = localStorage.getItem(this.userEmailKey);
-    
+
     if (lista.id && email) {
       await this.apiService.deletarLista(lista.id);
     }
-    
+
     this.listasSalvas = this.listasSalvas.filter(l => l.id !== lista.id && l.nome !== lista.nome);
     if (!email) {
       localStorage.setItem(this.storageListasKey, JSON.stringify(this.listasSalvas));
