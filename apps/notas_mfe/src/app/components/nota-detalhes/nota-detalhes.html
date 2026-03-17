@@ -8,7 +8,8 @@
           {{ nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome }}
         </mat-card-title>
         <div class="sub-info">
-          <span class="endereco">{{ nota.estabelecimento?.endereco }}</span>       
+          <span class="endereco">{{ nota.estabelecimento?.endereco }}</span>
+          <span class="cnpj-text" *ngIf="nota.estabelecimento?.cnpj">CNPJ: {{ nota.estabelecimento?.cnpj }}</span>
         </div>
       </div>
       <button mat-icon-button (click)="fecharNota()">
