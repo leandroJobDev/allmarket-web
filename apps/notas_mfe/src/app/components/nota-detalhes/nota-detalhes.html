@@ -34,26 +34,24 @@
   </div>
 </div>
 
-    <div class="table-container">
-      <table mat-table [dataSource]="nota.itens || []" class="itens-table">
-        <ng-container matColumnDef="item">
-          <th mat-header-cell *matHeaderCellDef> ITENS </th>
-          <td mat-cell *matCellDef="let element"> 
-            <span class="item-nome">{{ element.nome }}</span>
-            <span class="item-qtd">Qtd: {{ element.quantidade }} {{ element.unidade }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="valor">
-          <th mat-header-cell *matHeaderCellDef class="text-right"> VALOR </th>
-          <td mat-cell *matCellDef="let element" class="text-right font-bold"> 
-            {{ element.preco_total | currency:'BRL' }} 
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
+  <div class="itens-agrupados" *ngIf="nota.itens">
+  <div *ngFor="let grupo of nota.itens | groupBy:'categoria'" class="categoria-section">
+    <div class="categoria-header">
+      <mat-icon>{{ getIcon(grupo.key) }}</mat-icon>
+      <span>{{ grupo.key || 'OUTROS' }}</span>
+      <span class="count-badge">{{ grupo.value.length }}</span>
     </div>
+
+    <div class="item-row" *ngFor="let item of grupo.value">
+      <div class="item-main">
+        <span class="nome">{{ item.nome }}</span>
+        <span class="detalhes">{{ item.quantidade }} {{ item.unidade }}</span>
+      </div>
+      <div class="item-preco">
+        {{ item.preco_total | currency:'BRL' }}
+      </div>
+    </div>
+  </div>
+</div>
   </mat-card-content>
 </mat-card>
