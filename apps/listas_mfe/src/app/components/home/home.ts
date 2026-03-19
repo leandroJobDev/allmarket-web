@@ -11,12 +11,37 @@ import { firstValueFrom } from 'rxjs';
 interface ItemLista {
   nome: string;
   comprado: boolean;
+  categoria?: string;
+}
+
+@Pipe({
+  name: 'groupBy',
+  standalone: true
+})
+export class GroupByPipe implements PipeTransform {
+  transform(collection: any[], property: string): any[] {
+    if (!collection) return [];
+    const groupedCollection = collection.reduce((previous, current) => {
+      const key = current[property] ? current[property].toUpperCase() : 'OUTROS';
+      if (!previous[key]) {
+        previous[key] = [current];
+      } else {
+        previous[key].push(previous[key].indexOf(current) === -1 ? current : null);
+      }
+      return previous;
+    }, {});
+
+    return Object.keys(groupedCollection).map(key => ({
+      key,
+      value: groupedCollection[key]
+    }));
+  }
 }
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatCheckboxModule, MatDialogModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatCheckboxModule, MatDialogModule, GroupByPipe],
   templateUrl: './home.html',
   styleUrls: ['./home.scss']
 })
@@ -137,6 +162,7 @@ export class Home implements OnInit {
     this.lojaSelecionada = obj;
     this.itensParaEscolher = obj.itens.map((p: any) => ({
       nome: p.nome.toUpperCase().trim(),
+      categoria: p.categoria || 'OUTROS',
       selecionado: isLista
     }));
   }
@@ -145,7 +171,11 @@ export class Home implements OnInit {
     const selecionados = this.itensParaEscolher.filter(i => i.selecionado);
     selecionados.forEach(item => {
       if (!this.itens.find(i => i.nome === item.nome)) {
-        this.itens.unshift({ nome: item.nome, comprado: false });
+        this.itens.unshift({ 
+          nome: item.nome, 
+          comprado: false,
+          categoria: item.categoria 
+        });
       }
     });
     this.salvarNoStorage();
@@ -162,7 +192,7 @@ export class Home implements OnInit {
     const nome = valor.trim().toUpperCase();
     if (nome) {
       if (!this.itens.find(i => i.nome === nome)) {
-        this.itens.unshift({ nome, comprado: false });
+        this.itens.unshift({ nome, comprado: false, categoria: 'OUTROS' });
         this.salvarNoStorage();
       }
       if (typeof input !== 'string') input.value = '';
@@ -197,9 +227,24 @@ export class Home implements OnInit {
   }
 
   get itensSorted(): ItemLista[] {
-    // Ordena apenas pelo nome. Assim o item mantém sua posição 
-    // alfabética fixa mesmo se for marcado como comprado.
     return [...this.itens].sort((a, b) => a.nome.localeCompare(b.nome));
+  }
+
+  getIcon(categoria: string): string {
+    if (!categoria) return 'inventory_2';
+    
+    const icons: { [key: string]: string } = {
+      'ALIMENTOS': 'restaurant',
+      'BEBIDAS': 'local_drink',
+      'HIGIENE': 'sanitizer',
+      'LIMPEZA': 'cleaning_services',
+      'HORTIFRUTI': 'eco',
+      'CARNES': 'kebab_dining',
+      'PADARIA': 'bakery_dining',
+      'OUTROS': 'inventory_2'
+    };
+
+    return icons[categoria.toUpperCase()] || 'inventory_2';
   }
 
   async toggleItem(item: ItemLista) {

@@ -63,10 +63,16 @@
             Selecionar tudo
           </mat-checkbox>
         </div>
-        <div *ngFor="let item of itensParaEscolher" class="selectable-item">
-          <mat-checkbox [(ngModel)]="item.selecionado" color="primary">
-            {{ item.nome }}
-          </mat-checkbox>
+        <div *ngFor="let grupo of itensParaEscolher | groupBy:'categoria'" class="categoria-section-mini">
+          <div class="categoria-header-mini">
+            <mat-icon>{{ getIcon(grupo.key) }}</mat-icon>
+            <span>{{ grupo.key }}</span>
+          </div>
+          <div *ngFor="let item of grupo.value" class="selectable-item">
+            <mat-checkbox [(ngModel)]="item.selecionado" color="primary">
+              {{ item.nome }}
+            </mat-checkbox>
+          </div>
         </div>
       </div>
 
@@ -145,14 +151,22 @@
       </div>
     </div>
 
-    <div *ngFor="let item of itensSorted" class="item-card-row" [class.is-comprado]="item.comprado">
-      <div class="item-info">
-        <mat-checkbox [(ngModel)]="item.comprado" (change)="salvarNoStorage()" color="primary"></mat-checkbox>
-        <span class="item-nome" [class.comprado]="item.comprado">{{ item.nome }}</span>
+    <div *ngFor="let grupo of (itensSorted | groupBy:'categoria')" class="categoria-section">
+      <div class="categoria-header">
+        <mat-icon>{{ getIcon(grupo.key) }}</mat-icon>
+        <span>{{ grupo.key }}</span>
+        <span class="count-badge">{{ grupo.value.length }}</span>
       </div>
-      <button class="btn-delete" (click)="removerPorNome(item.nome)">
-        <mat-icon>delete_outline</mat-icon>
-      </button>
+      
+      <div *ngFor="let item of grupo.value" class="item-card-row" [class.is-comprado]="item.comprado">
+        <div class="item-info">
+          <mat-checkbox [(ngModel)]="item.comprado" (change)="toggleItem(item)" color="primary"></mat-checkbox>
+          <span class="item-nome" [class.comprado]="item.comprado">{{ item.nome }}</span>
+        </div>
+        <button class="btn-delete" (click)="removerPorNome(item.nome)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>

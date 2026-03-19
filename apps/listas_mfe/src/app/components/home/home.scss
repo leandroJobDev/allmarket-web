@@ -337,3 +337,60 @@
   }
   .btn-delete { background: none; border: none; color: #cbd5e1; }
 }
+
+.categoria-section {
+  margin-bottom: 24px;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  overflow: hidden;
+
+  .categoria-header {
+    background: #f8fafc;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    border-bottom: 1px solid #f1f5f9;
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+    .count-badge {
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-left: auto;
+    }
+  }
+
+  .item-card-row {
+    margin-bottom: 0px;
+    border-radius: 0;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    &:last-child { border-bottom: none; }
+  }
+}
+
+.categoria-section-mini {
+  margin-bottom: 16px;
+  .categoria-header-mini {
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    background: #f9fafb;
+    border-bottom: 1px solid #f1f5f9;
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  }
+  .selectable-item {
+    padding: 4px 16px;
+  }
+}
