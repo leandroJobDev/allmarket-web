@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, Pipe, PipeTransform } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,21 +20,24 @@ interface ItemLista {
 })
 export class GroupByPipe implements PipeTransform {
   transform(collection: any[], property: string): any[] {
-    if (!collection) return [];
-    const groupedCollection = collection.reduce((previous, current) => {
-      const key = current[property] ? current[property].toUpperCase() : 'OUTROS';
-      if (!previous[key]) {
-        previous[key] = [current];
-      } else {
-        previous[key].push(previous[key].indexOf(current) === -1 ? current : null);
-      }
-      return previous;
-    }, {});
+    if (!collection || !Array.isArray(collection)) return [];
+    
+    const groups = collection.reduce((acc, curr) => {
+      if (!curr) return acc;
+      const key = (curr[property] || 'OUTROS').toUpperCase();
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(curr);
+      return acc;
+    }, {} as { [key: string]: any[] });
 
-    return Object.keys(groupedCollection).map(key => ({
+    return Object.keys(groups).map(key => ({
       key,
-      value: groupedCollection[key]
-    }));
+      value: groups[key]
+    })).sort((a, b) => {
+      if (a.key === 'OUTROS') return 1;
+      if (b.key === 'OUTROS') return -1;
+      return a.key.localeCompare(b.key);
+    });
   }
 }
 
@@ -74,7 +77,12 @@ export class Home implements OnInit {
     if (!email) {
       // Fallback para localStorage se não houver email logado
       const salvo = localStorage.getItem(this.storageKey);
-      if (salvo) this.itens = JSON.parse(salvo);
+      if (salvo) {
+        this.itens = JSON.parse(salvo).map((i: any) => ({
+          ...i,
+          categoria: i.categoria || 'OUTROS'
+        }));
+      }
 
       const listasDB = localStorage.getItem(this.storageListasKey);
       if (listasDB) this.listasSalvas = JSON.parse(listasDB);
@@ -100,7 +108,10 @@ export class Home implements OnInit {
     const listaAtiva = listas.find(l => l.ativa);
     if (listaAtiva) {
       this.listaAtivaObjeto = listaAtiva;
-      this.itens = listaAtiva.itens || [];
+      this.itens = (listaAtiva.itens || []).map((i: any) => ({
+        ...i,
+        categoria: i.categoria || 'OUTROS'
+      }));
     } else {
       // Se não tem no firestore mas tem no localStorage, migra
       const salvo = localStorage.getItem(this.storageKey);
@@ -229,6 +240,9 @@ export class Home implements OnInit {
   get itensSorted(): ItemLista[] {
     return [...this.itens].sort((a, b) => a.nome.localeCompare(b.nome));
   }
+
+  trackByGrupo(index: number, grupo: any) { return grupo.key; }
+  trackByItem(index: number, item: any) { return item.nome; }
 
   getIcon(categoria: string): string {
     if (!categoria) return 'inventory_2';

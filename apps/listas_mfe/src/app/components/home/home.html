@@ -63,7 +63,7 @@
             Selecionar tudo
           </mat-checkbox>
         </div>
-        <div *ngFor="let grupo of itensParaEscolher | groupBy:'categoria'" class="categoria-section-mini">
+        <div *ngFor="let grupo of itensParaEscolher | groupBy:'categoria'; trackBy: trackByGrupo" class="categoria-section-mini">
           <div class="categoria-header-mini">
             <mat-icon>{{ getIcon(grupo.key) }}</mat-icon>
             <span>{{ grupo.key }}</span>
@@ -151,14 +151,14 @@
       </div>
     </div>
 
-    <div *ngFor="let grupo of (itensSorted | groupBy:'categoria')" class="categoria-section">
+    <div *ngFor="let grupo of itensSorted | groupBy:'categoria'; trackBy: trackByGrupo" class="categoria-section">
       <div class="categoria-header">
         <mat-icon>{{ getIcon(grupo.key) }}</mat-icon>
         <span>{{ grupo.key }}</span>
         <span class="count-badge">{{ grupo.value.length }}</span>
       </div>
       
-      <div *ngFor="let item of grupo.value" class="item-card-row" [class.is-comprado]="item.comprado">
+      <div *ngFor="let item of grupo.value; trackBy: trackByItem" class="item-card-row" [class.is-comprado]="item.comprado">
         <div class="item-info">
           <mat-checkbox [(ngModel)]="item.comprado" (change)="toggleItem(item)" color="primary"></mat-checkbox>
           <span class="item-nome" [class.comprado]="item.comprado">{{ item.nome }}</span>
