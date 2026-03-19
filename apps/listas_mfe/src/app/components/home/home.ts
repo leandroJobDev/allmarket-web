@@ -249,11 +249,14 @@ export class Home implements OnInit {
     
     const icons: { [key: string]: string } = {
       'ALIMENTOS': 'restaurant',
+      'LATICÍNIOS': 'egg_alt',
       'BEBIDAS': 'local_drink',
       'HIGIENE': 'sanitizer',
+      'HIGIENE PESSOAL': 'sanitizer',
       'LIMPEZA': 'cleaning_services',
       'HORTIFRUTI': 'eco',
       'CARNES': 'kebab_dining',
+      'CARNES E EMBUTIDOS': 'kebab_dining',
       'PADARIA': 'bakery_dining',
       'OUTROS': 'inventory_2'
     };
