@@ -72,6 +72,11 @@ export class Home implements OnInit {
   storageListasKey = 'allmarket_listas_salvas_db';
   userEmailKey = 'allmarket_user_email';
 
+  get isLogged(): boolean {
+    return !!localStorage.getItem(this.userEmailKey);
+  }
+
+
   async ngOnInit() {
     const email = localStorage.getItem(this.userEmailKey);
     if (!email) {

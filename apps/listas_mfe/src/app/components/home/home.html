@@ -85,15 +85,15 @@
   </div>
 
   <div class="items-grid">
-    <div class="list-control-header" *ngIf="itens.length > 0">
+    <div class="list-control-header">
       <div class="list-identity">
         <mat-icon>checklist</mat-icon>
         <span>{{ (listaAtivaObjeto?.nome || 'LISTA ATUAL') }}</span>
       </div>
       <button class="btn-group-manage" (click)="exibirPainelCompartilhar = !exibirPainelCompartilhar"
-        [class.active]="exibirPainelCompartilhar">
+        [class.active]="exibirPainelCompartilhar" *ngIf="isLogged">
         <mat-icon>group_add</mat-icon>
-        <span>Vincular Familiar</span>
+        <span>Vincular Conta</span>
       </button>
     </div>
 
