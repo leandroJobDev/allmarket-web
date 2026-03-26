@@ -6,22 +6,17 @@
         placeholder="Cole o link da nota..." 
         [(ngModel)]="urlNota" 
         (keyup.enter)="enviarNota()"
-        [disabled]="isProcessando">
+        [disabled]="loadingService.loading$()">
       
       <button 
         mat-icon-button 
         matSuffix 
         (click)="enviarNota()" 
-        [disabled]="isProcessando || !urlNota.trim()"
+        [disabled]="loadingService.loading$() || !urlNota.trim()"
         class="custom-send-button">
         
-        <mat-icon *ngIf="!isProcessando">content_paste</mat-icon>
+        <mat-icon>content_paste</mat-icon>
         
-        <mat-progress-spinner
-          *ngIf="isProcessando"
-          mode="indeterminate"
-          diameter="22">
-        </mat-progress-spinner>
       </button>
     </mat-form-field>
   </div>

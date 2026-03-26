@@ -1,12 +1,12 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { RouterModule, Router, NavigationEnd, NavigationStart, NavigationCancel, NavigationError } from '@angular/router';
 import { filter, map, startWith } from 'rxjs/operators';
-import { Navbar, NotasApiService } from '@allmarket-web/shared';
+import { Navbar, NotasApiService, ScannerAnimationComponent, LoadingService } from '@allmarket-web/shared';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, Navbar],
+  imports: [CommonModule, RouterModule, Navbar, ScannerAnimationComponent],
   selector: 'app-allmarket-entry',
   templateUrl: './entry.html',
   styleUrls: ['./entry.scss']
@@ -15,12 +15,25 @@ export class RemoteEntry implements OnInit {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   private apiService = inject(NotasApiService);
+  public loadingService = inject(LoadingService);
 
   exibirNavbar = false;
   exibirProcessarNota = false;
   userData: any = null;
 
   ngOnInit() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.loadingService.show();
+      } else if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        this.loadingService.hide();
+      }
+    });
+    
     this.verificarStatus();
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -30,14 +43,14 @@ export class RemoteEntry implements OnInit {
   async verificarStatus() {
     const dadosUsuario = localStorage.getItem('allmarket_user');
     const email = localStorage.getItem('allmarket_user_email');
-    const url = this.router.url;
+    const currentPath = window.location.pathname;
 
     if (dadosUsuario && email) {
       this.userData = JSON.parse(dadosUsuario);
-      this.exibirNavbar = !url.includes('/login');
-      this.exibirProcessarNota = !url.includes('/login');
+      this.exibirNavbar = !currentPath.includes('/login');
+      this.exibirProcessarNota = !currentPath.includes('/login');
 
-      if (url === '/' || url === '/login') {
+      if (currentPath === '/' || currentPath === '/login') {
         const temNotas = await this.apiService.validarEAtualizarNotas(email);
         if (temNotas) {
           this.router.navigate(['/notas']);
@@ -48,7 +61,7 @@ export class RemoteEntry implements OnInit {
     } else {
       this.exibirNavbar = false;
       this.exibirProcessarNota = false;
-      if (!url.includes('/login')) {
+      if (!currentPath.includes('/login')) {
         this.router.navigate(['/login']);
       }
     }

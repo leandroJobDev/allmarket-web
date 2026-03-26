@@ -1,11 +1,12 @@
 import { Component, OnInit, inject, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { NotasApiService } from '@allmarket-web/shared';
+import { NotasApiService, ProcessarNota } from '@allmarket-web/shared';
 import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
 
 @Component({
@@ -18,7 +19,8 @@ import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    NotaDetalhes
+    NotaDetalhes,
+    ProcessarNota
   ],
   providers: [CurrencyPipe, DatePipe],
   templateUrl: './home.html',
@@ -27,6 +29,7 @@ import { NotaDetalhes } from '../nota-detalhes/nota-detalhes';
 export class Home implements OnInit, AfterViewChecked {
   private apiService = inject(NotasApiService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   todasAsNotas: any[] = [];
   notasFiltradas: any[] = [];
@@ -61,16 +64,25 @@ export class Home implements OnInit, AfterViewChecked {
 
   async carregarDados() {
     const email = localStorage.getItem('allmarket_user_email');
-    if (!email) return;
+    if (!email) {
+      this.router.navigate(['/welcome']);
+      return;
+    }
 
     try {
       this.todasAsNotas = await this.apiService.getHistorico(email);
+      
+      if (!this.todasAsNotas || this.todasAsNotas.length === 0) {
+        this.router.navigate(['/welcome']);
+        return;
+      }
+
       this.aplicarFiltrosEDados();
       
       const chave = localStorage.getItem('allmarket_nota_chave_focus');
       if (chave) this.verificarNotaParaAbrir(chave);
     } catch (error) {
-      console.error(error);
+      this.router.navigate(['/welcome']);
     }
   }
 
@@ -109,14 +121,16 @@ export class Home implements OnInit, AfterViewChecked {
 
   private definirLimiteInicial() {
     const width = window.innerWidth;
-    if (width < 768) this.limiteExibicao = 6;
-    else if (width < 1200) this.limiteExibicao = 10;
-    else this.limiteExibicao = 16;
+    if (width < 768) {
+      this.limiteExibicao = 6;
+    } else {
+      this.limiteExibicao = 12;
+    }
   }
 
   aplicarFiltrosEDados() {
     this.notasFiltradas = this.todasAsNotas.filter(nota => {
-      const nome = nota.estabelecimento?.nome?.toLowerCase() || '';
+      const nome = (nota.estabelecimento?.nome_fantasia || nota.estabelecimento?.nome)?.toLowerCase() || '';
       return nome.includes(this.termoBusca.toLowerCase());
     });
     this.atualizarLista();
@@ -124,9 +138,11 @@ export class Home implements OnInit, AfterViewChecked {
 
   mostrarMaisNotas() {
     const width = window.innerWidth;
-    if (width < 768) this.limiteExibicao += 6;
-    else if (width < 1200) this.limiteExibicao += 10;
-    else this.limiteExibicao += 16;
+    if (width < 768) {
+      this.limiteExibicao += 6;
+    } else {
+      this.limiteExibicao += 12;
+    }
     this.atualizarLista();
   }
 
@@ -137,15 +153,19 @@ export class Home implements OnInit, AfterViewChecked {
     try {
       const sucesso = await this.apiService.excluirNota(chave, email);
       if (sucesso) {
-        setTimeout(() => {
-          this.notaSelecionada = null;
-          this.cdr.detectChanges();
-        }, 0);
-  
-        await this.carregarDados();
+        this.todasAsNotas = this.todasAsNotas.filter(n => n.chave !== chave);
+        
+        if (this.todasAsNotas.length === 0) {
+          this.router.navigate(['/welcome']);
+          return;
+        }
+
+        this.notaSelecionada = null;
+        this.aplicarFiltrosEDados();
+        this.cdr.detectChanges();
       }
     } catch (error) {
-      console.error("Erro ao excluir nota:", error);
+      console.error(error);
     }
   }
 }
