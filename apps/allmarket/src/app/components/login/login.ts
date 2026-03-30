@@ -39,8 +39,10 @@ export class Login implements OnInit, AfterViewInit {
     if (typeof google !== 'undefined') {
       google.accounts.id.initialize({
         client_id: '570724598871-n23jsilb8ncvfv2ve6b848q327fgdav9.apps.googleusercontent.com',
-        callback: (res: any) => this.handleLogin(res)
+        callback: (res: any) => this.handleLogin(res),
+        auto_select: true
       });
+      google.accounts.id.prompt();
     }
   }
 
